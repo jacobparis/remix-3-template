@@ -32,9 +32,116 @@ const navLinks = [
 export function HomePage() {
   return () => (
     <Document title="Remix UI">
-      <SiteHeader />
+      <header
+        mix={css({
+          position: 'sticky',
+          top: 0,
+          zIndex: 10,
+          background: tokens.surface.lvl1,
+          borderBlockEnd: `1px solid ${tokens.colors.border.subtle}`,
+        })}
+      >
+        <Container
+          mix={css({
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: tokens.space.lg,
+            height: '56px',
+          })}
+        >
+          <a
+            href="/"
+            aria-label="Remix UI home"
+            mix={css({
+              display: 'inline-flex',
+              alignItems: 'center',
+              color: tokens.colors.text.primary,
+            })}
+          >
+            <RemixWordmark height={14} />
+          </a>
+          <nav
+            aria-label="Primary"
+            mix={css({ display: 'flex', alignItems: 'center', gap: tokens.space.xs })}
+          >
+            {navLinks.map((link) => (
+              <LinkButton
+                key={link.href}
+                href={link.href}
+                variant="ghost"
+                size="sm"
+                mix={css({ '@media (max-width: 640px)': { display: 'none' } })}
+              >
+                {link.label}
+              </LinkButton>
+            ))}
+            <LinkButton
+              href="https://github.com/remix-run/remix"
+              aria-label="Remix on GitHub"
+              variant="ghost"
+              size="icon"
+            >
+              <GitHubIcon />
+            </LinkButton>
+          </nav>
+        </Container>
+      </header>
       <main>
-        <Hero />
+        <Container>
+          <section
+            aria-labelledby="hero-title"
+            mix={css({
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '20px',
+              paddingBlock: '72px 40px',
+              '@media (max-width: 640px)': { paddingBlock: '40px 24px' },
+            })}
+          >
+            <h1
+              id="hero-title"
+              mix={[
+                fontDisplay,
+                fontSemibold,
+                css({ margin: 0, maxWidth: '760px', textWrap: 'balance' }),
+              ]}
+            >
+              Remix 3 components render on the server and hydrate without React
+            </h1>
+            <p
+              mix={[
+                fontLg,
+                textSecondary,
+                css({ margin: 0, maxWidth: '640px', textWrap: 'pretty' }),
+              ]}
+            >
+              Each component is a setup function that returns a render function. Styles attach
+              through the css() mixin, and every color resolves with light-dark(), so the page
+              follows the visitor&apos;s system theme.
+            </p>
+            <div
+              mix={css({
+                display: 'flex',
+                flexWrap: 'wrap',
+                alignItems: 'center',
+                gap: tokens.space.sm,
+              })}
+            >
+              <LinkButton href="#components" size="lg">
+                Browse components
+              </LinkButton>
+              <LinkButton href="https://guides.remix.run" variant="outline" size="lg">
+                Read the guides
+              </LinkButton>
+              <code
+                mix={[fontSm, fontMono, textSecondary, css({ marginInlineStart: tokens.space.sm })]}
+              >
+                npm i remix
+              </code>
+            </div>
+          </section>
+        </Container>
         <Section id="foundations" title="Every component reads from one set of light-dark tokens">
           <Foundations />
         </Section>
@@ -76,127 +183,25 @@ export function HomePage() {
           <ComponentGallery />
         </Section>
       </main>
-      <SiteFooter />
+      <footer>
+        <Container>
+          <p
+            mix={[
+              fontSm,
+              textSecondary,
+              css({
+                margin: 0,
+                paddingBlock: '32px 48px',
+                marginBlockStart: '24px',
+                borderBlockStart: `1px solid ${tokens.colors.border.subtle}`,
+              }),
+            ]}
+          >
+            Remix docs and examples are licensed under MIT.
+          </p>
+        </Container>
+      </footer>
     </Document>
-  )
-}
-
-function SiteHeader() {
-  return () => (
-    <header
-      mix={css({
-        position: 'sticky',
-        top: 0,
-        zIndex: 10,
-        background: tokens.surface.lvl1,
-        borderBlockEnd: `1px solid ${tokens.colors.border.subtle}`,
-      })}
-    >
-      <Container
-        mix={css({
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: tokens.space.lg,
-          height: '56px',
-        })}
-      >
-        <a
-          href="/"
-          aria-label="Remix UI home"
-          mix={css({
-            display: 'inline-flex',
-            alignItems: 'center',
-            color: tokens.colors.text.primary,
-          })}
-        >
-          <RemixWordmark height={14} />
-        </a>
-        <nav
-          aria-label="Primary"
-          mix={css({ display: 'flex', alignItems: 'center', gap: tokens.space.xs })}
-        >
-          {navLinks.map((link) => (
-            <LinkButton
-              key={link.href}
-              href={link.href}
-              variant="ghost"
-              size="sm"
-              mix={css({ '@media (max-width: 640px)': { display: 'none' } })}
-            >
-              {link.label}
-            </LinkButton>
-          ))}
-          <LinkButton
-            href="https://github.com/remix-run/remix"
-            aria-label="Remix on GitHub"
-            variant="ghost"
-            size="icon"
-          >
-            <GitHubIcon />
-          </LinkButton>
-        </nav>
-      </Container>
-    </header>
-  )
-}
-
-function Hero() {
-  return () => (
-    <Container>
-      <section
-        aria-labelledby="hero-title"
-        mix={css({
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '20px',
-          paddingBlock: '72px 40px',
-          '@media (max-width: 640px)': { paddingBlock: '40px 24px' },
-        })}
-      >
-        <h1
-          id="hero-title"
-          mix={[
-            fontDisplay,
-            fontSemibold,
-            css({ margin: 0, maxWidth: '760px', textWrap: 'balance' }),
-          ]}
-        >
-          Remix 3 components render on the server and hydrate without React
-        </h1>
-        <p
-          mix={[
-            fontLg,
-            textSecondary,
-            css({ margin: 0, maxWidth: '640px', textWrap: 'pretty' }),
-          ]}
-        >
-          Each component is a setup function that returns a render function. Styles attach through
-          the css() mixin, and every color resolves with light-dark(), so the page follows the
-          visitor&apos;s system theme.
-        </p>
-        <div
-          mix={css({
-            display: 'flex',
-            flexWrap: 'wrap',
-            alignItems: 'center',
-            gap: tokens.space.sm,
-          })}
-        >
-          <LinkButton href="#components" size="lg">
-            Browse components
-          </LinkButton>
-          <LinkButton href="https://guides.remix.run" variant="outline" size="lg">
-            Read the guides
-          </LinkButton>
-          <code
-            mix={[fontSm, fontMono, textSecondary, css({ marginInlineStart: tokens.space.sm })]}
-          >
-            npm i remix
-          </code>
-        </div>
-      </section>
-    </Container>
   )
 }
 
@@ -224,28 +229,5 @@ function Section(handle: Handle<{ id: string; title: string; children: RemixNode
         {handle.props.children}
       </section>
     </Container>
-  )
-}
-
-function SiteFooter() {
-  return () => (
-    <footer>
-      <Container>
-        <p
-          mix={[
-            fontSm,
-            textSecondary,
-            css({
-              margin: 0,
-              paddingBlock: '32px 48px',
-              marginBlockStart: '24px',
-              borderBlockStart: `1px solid ${tokens.colors.border.subtle}`,
-            }),
-          ]}
-        >
-          Remix docs and examples are licensed under MIT.
-        </p>
-      </Container>
-    </footer>
   )
 }
