@@ -11,7 +11,11 @@ import type { ToggleProps } from './toggle.tsx'
 import { fontMedium, fontSm, fontXs, textPrimary, textSecondary } from './text.ts'
 import { componentStyleValues as tokens } from './tokens.ts'
 
-export type FieldProps = {
+// A <legend> renders outside its fieldset's grid or flex flow, so a parent `gap` never
+// reaches it. Both wrappers space the label with this one value so they always match.
+const labelGap = '6px'
+
+export type FieldProps = Pick<Props<'div'>, 'mix'> & {
   label: RemixNode
   controlId?: string
   labelId?: string
@@ -20,7 +24,10 @@ export type FieldProps = {
 
 export type TextFieldProps = InputProps & { id: string; label: RemixNode }
 
-export type FieldsetProps = { legend: RemixNode; children: RemixNode }
+export type FieldsetProps = Pick<Props<'fieldset'>, 'mix'> & {
+  legend: RemixNode
+  children: RemixNode
+}
 
 export type CheckboxFieldProps = CheckboxProps & { label: RemixNode }
 
@@ -30,10 +37,10 @@ export type ToggleFieldProps = ToggleProps & { label: RemixNode; description?: R
 
 export function Field(handle: Handle<FieldProps>): () => RemixNode {
   return () => {
-    let { label, controlId, labelId, children } = handle.props
+    let { label, controlId, labelId, children, mix } = handle.props
 
     return (
-      <div mix={css({ display: 'grid', gap: '6px', minWidth: 0 })}>
+      <div mix={[css({ display: 'grid', gap: labelGap, minWidth: 0 }), mix]}>
         <label for={controlId} id={labelId} mix={[fontXs, fontMedium, textSecondary]}>
           {label}
         </label>
@@ -56,25 +63,20 @@ export function TextField(handle: Handle<TextFieldProps>): () => RemixNode {
 }
 
 export function Fieldset(handle: Handle<FieldsetProps>): () => RemixNode {
-  return () => (
-    <fieldset
-      mix={css({
-        display: 'grid',
-        gap: tokens.space.sm,
-        minWidth: 0,
-        margin: 0,
-        padding: 0,
-        border: 0,
-      })}
-    >
-      <legend mix={[fontXs, fontMedium, textSecondary, css({ padding: 0 })]}>
-        {handle.props.legend}
-      </legend>
-      <div mix={css({ display: 'flex', flexWrap: 'wrap', gap: tokens.space.lg })}>
-        {handle.props.children}
-      </div>
-    </fieldset>
-  )
+  return () => {
+    let { legend, children, mix } = handle.props
+
+    return (
+      <fieldset mix={[css({ minWidth: 0, margin: 0, padding: 0, border: 0 }), mix]}>
+        <legend
+          mix={[fontXs, fontMedium, textSecondary, css({ padding: 0, marginBlockEnd: labelGap })]}
+        >
+          {legend}
+        </legend>
+        <div mix={css({ display: 'flex', flexWrap: 'wrap', gap: tokens.space.lg })}>{children}</div>
+      </fieldset>
+    )
+  }
 }
 
 export function CheckboxField(handle: Handle<CheckboxFieldProps>): () => RemixNode {

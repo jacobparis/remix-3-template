@@ -333,14 +333,7 @@ export const ComponentGallery = clientEntry(
               CardContent holds the body. Callers add layout through mix.
             </p>
           </CardContent>
-          <CardFooter
-            mix={css({
-              display: 'flex',
-              justifyContent: 'flex-end',
-              gap: tokens.space.sm,
-              borderBlockStart: `1px solid ${tokens.colors.border.subtle}`,
-            })}
-          >
+            <CardFooter bordered mix={css({ justifyContent: 'flex-end' })}>
             <Button variant="ghost">Cancel</Button>
             <Button>Save</Button>
           </CardFooter>

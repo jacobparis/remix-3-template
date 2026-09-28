@@ -134,13 +134,7 @@ export const ProjectSettings = clientEntry(
             </Tabs>
           </form>
         </CardContent>
-        <CardFooter
-          mix={css({
-            justifyContent: 'flex-end',
-            paddingBlockStart: tokens.space.lg,
-            borderBlockStart: `1px solid ${tokens.colors.border.subtle}`,
-          })}
-        >
+            <CardFooter bordered mix={css({ justifyContent: 'flex-end' })}>
           <Button type="reset" form="project-settings" variant="outline">
             Cancel
           </Button>

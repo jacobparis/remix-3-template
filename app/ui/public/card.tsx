@@ -48,7 +48,12 @@ export function CardHeader(handle: Handle<Props<'div'>>): () => RemixNode {
             alignItems: 'start',
             gap: tokens.space.xs,
             paddingInline: '20px',
-            '&:has([data-slot="card-action"])': { gridTemplateColumns: 'minmax(0, 1fr) auto' },
+            '&:has([data-slot="card-action"])': {
+              gridTemplateColumns: 'minmax(0, 1fr) auto',
+              alignItems: 'center',
+              columnGap: tokens.space.md,
+            },
+            '& > [data-slot="card-description"]': { gridColumn: '1' },
           }),
           mix,
         ]}
@@ -101,9 +106,9 @@ export function CardAction(handle: Handle<Props<'div'>>): () => RemixNode {
         data-slot="card-action"
         mix={[
           css({
+            display: 'flex',
             gridColumn: '2',
-            gridRow: '1 / span 2',
-            alignSelf: 'start',
+            gridRow: '1',
             justifySelf: 'end',
           }),
           mix,
@@ -131,9 +136,11 @@ export function CardContent(handle: Handle<Props<'div'>>): () => RemixNode {
   }
 }
 
-export function CardFooter(handle: Handle<Props<'div'>>): () => RemixNode {
+export type CardFooterProps = Props<'div'> & { bordered?: boolean }
+
+export function CardFooter(handle: Handle<CardFooterProps>): () => RemixNode {
   return () => {
-    let { children, mix, ...divProps } = handle.props
+    let { bordered = false, children, mix, ...divProps } = handle.props
 
     return (
       <div
@@ -146,6 +153,12 @@ export function CardFooter(handle: Handle<Props<'div'>>): () => RemixNode {
             gap: tokens.space.sm,
             paddingInline: '20px',
           }),
+          bordered
+            ? css({
+                paddingBlockStart: '20px',
+                borderBlockStart: `1px solid ${tokens.colors.border.subtle}`,
+              })
+            : undefined,
           mix,
         ]}
       >
