@@ -1,8 +1,15 @@
 import { css } from 'remix/ui'
 import type { Handle } from 'remix/ui'
 
-import { Card, CardHeader } from './public/card.tsx'
-import { Caption, Code } from './public/text.tsx'
+import { Card, CardContent, CardHeader, CardTitle } from './public/card.tsx'
+import {
+  fontMedium,
+  fontMono,
+  fontXs,
+  textPrimary,
+  textSecondary,
+  truncate,
+} from './public/text.ts'
 import { componentStyleValues as tokens } from './public/tokens.ts'
 
 const brandColors = [
@@ -29,60 +36,120 @@ const typeScale = [
 
 export function Foundations() {
   return () => (
-    <div mix={gridStyle}>
-      <Card mix={wideStyle}>
-        <CardHeader title="Colors switch with the page between light and dark" />
-        <SwatchGroup label="Brand" items={brandColors} />
-        <SwatchGroup
-          label="Surface"
-          items={surfaces.map(([name, value]) => ({ name, value }))}
-          bordered
-        />
-        <SwatchGroup
-          label="Action"
-          items={actions.map(([name, value]) => ({ name, value: value.background }))}
-          bordered
-        />
-        <SwatchGroup
-          label="Text"
-          items={textColors.map(([name, value]) => ({ name, value }))}
-        />
+    <div
+      mix={css({
+        display: 'grid',
+        gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+        gap: tokens.space.lg,
+        '@media (max-width: 860px)': { gridTemplateColumns: 'minmax(0, 1fr)' },
+      })}
+    >
+      <Card mix={css({ gridColumn: '1 / -1' })}>
+        <CardHeader>
+          <CardTitle>Colors switch with the page between light and dark</CardTitle>
+        </CardHeader>
+        <CardContent mix={css({ display: 'grid', gap: '20px' })}>
+          <SwatchGroup label="Brand" items={brandColors} />
+          <SwatchGroup
+            label="Surface"
+            items={surfaces.map(([name, value]) => ({ name, value }))}
+            bordered
+          />
+          <SwatchGroup
+            label="Action"
+            items={actions.map(([name, value]) => ({ name, value: value.background }))}
+            bordered
+          />
+          <SwatchGroup label="Text" items={textColors.map(([name, value]) => ({ name, value }))} />
+        </CardContent>
       </Card>
       <Card>
-        <CardHeader title="Inter carries every size from display to label" />
-        <ul mix={stackStyle}>
-          {typeScale.map((step) => (
-            <li key={step.name} mix={typeRowStyle}>
-              <Caption>{step.name}</Caption>
-              <span
-                mix={typeSampleStyle}
-                style={{ fontSize: step.size, fontWeight: String(step.weight) }}
+        <CardHeader>
+          <CardTitle>Inter carries every size from display to label</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ul
+            mix={css({
+              listStyle: 'none',
+              margin: 0,
+              padding: 0,
+              display: 'grid',
+              gap: tokens.space.md,
+            })}
+          >
+            {typeScale.map((step) => (
+              <li
+                key={step.name}
+                mix={css({
+                  display: 'grid',
+                  gap: '2px',
+                  paddingBlockEnd: tokens.space.md,
+                  borderBlockEnd: `1px solid ${tokens.colors.border.subtle}`,
+                  '&:last-child': { borderBlockEnd: 0, paddingBlockEnd: 0 },
+                })}
               >
-                {step.sample}
-              </span>
-            </li>
-          ))}
-        </ul>
+                <span mix={[fontXs, fontMedium, textSecondary]}>{step.name}</span>
+                <span
+                  mix={[
+                    textPrimary,
+                    truncate,
+                    css({ lineHeight: 1.2, letterSpacing: '-0.01em' }),
+                  ]}
+                  style={{ fontSize: step.size, fontWeight: String(step.weight) }}
+                >
+                  {step.sample}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </CardContent>
       </Card>
       <Card>
-        <CardHeader title="Radius and spacing come in named steps" />
-        <div mix={rowWrapStyle}>
-          {radii.map(([name, value]) => (
-            <div key={name} mix={tokenTileStyle}>
-              <span mix={radiusBoxStyle} style={{ borderRadius: value }} />
-              <Caption>{name}</Caption>
-            </div>
-          ))}
-        </div>
-        <div mix={stackStyle}>
-          {spaces.map(([name, value]) => (
-            <div key={name} mix={spaceRowStyle}>
-              <Caption mix={spaceLabelStyle}>{name}</Caption>
-              <span mix={spaceBarStyle} style={{ width: value }} />
-              <Code>{value}</Code>
-            </div>
-          ))}
-        </div>
+        <CardHeader>
+          <CardTitle>Radius and spacing come in named steps</CardTitle>
+        </CardHeader>
+        <CardContent mix={css({ display: 'grid', gap: tokens.space.lg })}>
+          <div mix={css({ display: 'flex', flexWrap: 'wrap', gap: tokens.space.md })}>
+            {radii.map(([name, value]) => (
+              <div
+                key={name}
+                mix={css({ display: 'grid', justifyItems: 'center', gap: '6px' })}
+              >
+                <span
+                  mix={css({
+                    width: '52px',
+                    height: '52px',
+                    background: tokens.surface.lvl3,
+                    border: `1px solid ${tokens.colors.border.default}`,
+                  })}
+                  style={{ borderRadius: value }}
+                />
+                <span mix={[fontXs, fontMedium, textSecondary]}>{name}</span>
+              </div>
+            ))}
+          </div>
+          <div mix={css({ display: 'grid', gap: tokens.space.md })}>
+            {spaces.map(([name, value]) => (
+              <div
+                key={name}
+                mix={css({ display: 'flex', alignItems: 'center', gap: tokens.space.md })}
+              >
+                <span mix={[fontXs, fontMedium, textSecondary, css({ width: '24px' })]}>
+                  {name}
+                </span>
+                <span
+                  mix={css({
+                    height: '12px',
+                    borderRadius: '3px',
+                    background: tokens.colors.focus.ring,
+                  })}
+                  style={{ width: value }}
+                />
+                <code mix={[fontXs, fontMono, textSecondary]}>{value}</code>
+              </div>
+            ))}
+          </div>
+        </CardContent>
       </Card>
     </div>
   )
@@ -92,97 +159,34 @@ function SwatchGroup(
   handle: Handle<{ label: string; items: { name: string; value: string }[]; bordered?: boolean }>,
 ) {
   return () => (
-    <div mix={swatchGroupStyle}>
-      <Caption>{handle.props.label}</Caption>
-      <ul mix={swatchListStyle}>
+    <div mix={css({ display: 'grid', gap: tokens.space.sm })}>
+      <span mix={[fontXs, fontMedium, textSecondary]}>{handle.props.label}</span>
+      <ul
+        mix={css({
+          listStyle: 'none',
+          margin: 0,
+          padding: 0,
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(96px, 1fr))',
+          gap: tokens.space.sm,
+        })}
+      >
         {handle.props.items.map((item) => (
-          <li key={item.name} mix={swatchStyle}>
+          <li key={item.name} mix={css({ display: 'grid', gap: '6px' })}>
             <span
-              mix={[swatchChipStyle, handle.props.bordered ? chipBorderStyle : null]}
+              mix={css({
+                height: '44px',
+                borderRadius: tokens.radius.lg,
+                boxShadow: handle.props.bordered
+                  ? `inset 0 0 0 1px ${tokens.colors.border.default}`
+                  : 'inset 0 0 0 1px rgb(0 0 0 / 0.06)',
+              })}
               style={{ background: item.value }}
             />
-            <Code>{item.name}</Code>
+            <code mix={[fontXs, fontMono, textSecondary]}>{item.name}</code>
           </li>
         ))}
       </ul>
     </div>
   )
 }
-
-const gridStyle = css({
-  display: 'grid',
-  gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
-  gap: tokens.space.lg,
-  '@media (max-width: 860px)': { gridTemplateColumns: 'minmax(0, 1fr)' },
-})
-
-const wideStyle = css({ gridColumn: '1 / -1' })
-
-const swatchGroupStyle = css({ display: 'grid', gap: tokens.space.sm })
-
-const swatchListStyle = css({
-  listStyle: 'none',
-  margin: 0,
-  padding: 0,
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fill, minmax(96px, 1fr))',
-  gap: tokens.space.sm,
-})
-
-const swatchStyle = css({ display: 'grid', gap: '6px' })
-
-const swatchChipStyle = css({
-  height: '44px',
-  borderRadius: tokens.radius.lg,
-  boxShadow: 'inset 0 0 0 1px rgb(0 0 0 / 0.06)',
-})
-
-const chipBorderStyle = css({
-  boxShadow: `inset 0 0 0 1px ${tokens.colors.border.default}`,
-})
-
-const stackStyle = css({
-  listStyle: 'none',
-  margin: 0,
-  padding: 0,
-  display: 'grid',
-  gap: tokens.space.md,
-})
-
-const typeRowStyle = css({
-  display: 'grid',
-  gap: '2px',
-  paddingBlockEnd: tokens.space.md,
-  borderBlockEnd: `1px solid ${tokens.colors.border.subtle}`,
-  '&:last-child': { borderBlockEnd: 0, paddingBlockEnd: 0 },
-})
-
-const typeSampleStyle = css({
-  lineHeight: 1.2,
-  letterSpacing: '-0.01em',
-  color: tokens.colors.text.primary,
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
-  whiteSpace: 'nowrap',
-})
-
-const rowWrapStyle = css({ display: 'flex', flexWrap: 'wrap', gap: tokens.space.md })
-
-const tokenTileStyle = css({ display: 'grid', justifyItems: 'center', gap: '6px' })
-
-const radiusBoxStyle = css({
-  width: '52px',
-  height: '52px',
-  background: tokens.surface.lvl3,
-  border: `1px solid ${tokens.colors.border.default}`,
-})
-
-const spaceRowStyle = css({ display: 'flex', alignItems: 'center', gap: tokens.space.md })
-
-const spaceLabelStyle = css({ width: '24px' })
-
-const spaceBarStyle = css({
-  height: '12px',
-  borderRadius: '3px',
-  background: tokens.colors.focus.ring,
-})

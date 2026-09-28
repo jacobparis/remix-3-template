@@ -15,12 +15,6 @@ export function GitHubIcon() {
     </svg>
   )
 }
-const wordmarkStyle = css({
-  display: 'block',
-  aspectRatio: '163 / 16',
-  color: 'currentColor',
-  '& svg': { display: 'block', width: '100%', height: '100%' },
-})
 
 export function RemixWordmark(handle: Handle<{ height?: number }>) {
   // The letterforms use currentColor, so the wordmark inherits the surrounding text color.
@@ -28,7 +22,12 @@ export function RemixWordmark(handle: Handle<{ height?: number }>) {
     <span
       role="img"
       aria-label="Remix"
-      mix={wordmarkStyle}
+      mix={css({
+        display: 'block',
+        aspectRatio: '163 / 16',
+        color: 'currentColor',
+        '& svg': { display: 'block', width: '100%', height: '100%' },
+      })}
       style={{ height: `${handle.props.height ?? 16}px` }}
     >
       <svg viewBox="0 0 163 16" fill="currentColor" aria-hidden="true">

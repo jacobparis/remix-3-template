@@ -1,17 +1,107 @@
+import { css } from 'remix/ui'
 import type { Handle, Props, RemixNode } from 'remix/ui'
 import button from 'remix/ui/button'
-import type { ButtonOptions } from 'remix/ui/button'
 
-export type ButtonProps = Props<'button'> & ButtonOptions
+import { componentStyleValues as tokens } from './tokens.ts'
 
-export type LinkButtonProps = Props<'a'> & ButtonOptions
+// Keep only Remix's default-attrs behavior and base layout/focus ring. Its size and tone
+// mixins carry :hover:not(...) rules that a reset cannot outrank, so variants replace them.
+let [buttonDefaultAttrs, buttonBase] = button()
+
+const hover = '&:hover:not(:disabled):not([aria-disabled="true"])'
+const active = '&:active:not(:disabled):not([aria-disabled="true"])'
+
+// Clear every property a variant or size could have an opinion about, so each variant
+// only adds the styles it wants.
+const reset = css({
+  '--rmx-button-shadow': '0 0 0 0 transparent',
+  height: 'auto',
+  minHeight: 0,
+  padding: 0,
+  border: 0,
+  borderRadius: 0,
+  background: 'transparent',
+  color: 'inherit',
+  font: 'inherit',
+  letterSpacing: 'inherit',
+  textShadow: 'none',
+  textDecoration: 'none',
+  transform: 'none',
+})
+
+const base = css({
+  gap: tokens.space.sm,
+  borderRadius: tokens.radius.md,
+  fontSize: tokens.fontSize.sm,
+  fontWeight: tokens.fontWeight.medium,
+  lineHeight: '20px',
+  transition: 'background-color 120ms, border-color 120ms, color 120ms',
+  '& svg': { flexShrink: 0, width: '14px', height: '14px' },
+})
+
+const variants = {
+  default: css({
+    background: tokens.colors.action.primary.background,
+    color: tokens.colors.action.primary.foreground,
+    [hover]: { background: tokens.colors.action.primary.backgroundHover },
+    [active]: { background: tokens.colors.action.primary.backgroundActive },
+  }),
+  secondary: css({
+    background: tokens.surface.lvl3,
+    color: tokens.colors.text.primary,
+    [hover]: { background: tokens.colors.action.secondary.backgroundActive },
+  }),
+  outline: css({
+    background: tokens.colors.action.secondary.background,
+    color: tokens.colors.action.secondary.foreground,
+    '--rmx-button-shadow': `inset 0 0 0 1px ${tokens.colors.action.secondary.border}`,
+    [hover]: { background: tokens.colors.action.secondary.backgroundHover },
+    [active]: { background: tokens.colors.action.secondary.backgroundActive },
+  }),
+  ghost: css({
+    color: tokens.colors.text.primary,
+    [hover]: { background: 'light-dark(rgb(16 16 16 / 0.05), rgb(236 236 236 / 0.1))' },
+    [active]: { background: 'light-dark(rgb(16 16 16 / 0.08), rgb(236 236 236 / 0.14))' },
+  }),
+  destructive: css({
+    background: tokens.colors.action.danger.background,
+    color: tokens.colors.action.danger.foreground,
+    [hover]: { background: tokens.colors.action.danger.backgroundHover },
+    [active]: { background: tokens.colors.action.danger.backgroundActive },
+  }),
+  link: css({
+    color: tokens.colors.focus.ring,
+    textUnderlineOffset: '4px',
+    [hover]: { textDecoration: 'underline' },
+  }),
+}
+
+const sizes = {
+  sm: css({ height: tokens.control.height.sm, paddingInline: '10px' }),
+  default: css({ height: tokens.control.height.md, paddingInline: '12px' }),
+  lg: css({ height: tokens.control.height.lg, paddingInline: '16px' }),
+  icon: css({ width: tokens.control.height.md, height: tokens.control.height.md }),
+}
+
+export type ButtonVariant = keyof typeof variants
+export type ButtonSize = keyof typeof sizes
+
+export type ButtonVariantOptions = { variant?: ButtonVariant; size?: ButtonSize }
+
+export function buttonVariants({ variant = 'default', size = 'default' }: ButtonVariantOptions = {}) {
+  return [buttonDefaultAttrs, buttonBase, reset, base, variants[variant], sizes[size]] as const
+}
+
+export type ButtonProps = Props<'button'> & ButtonVariantOptions
+
+export type LinkButtonProps = Props<'a'> & ButtonVariantOptions
 
 export function Button(handle: Handle<ButtonProps>): () => RemixNode {
   return () => {
-    let { children, mix, size, tone, type, ...buttonProps } = handle.props
+    let { children, mix, variant, size, ...buttonProps } = handle.props
 
     return (
-      <button {...buttonProps} type={type ?? 'button'} mix={[button({ size, tone }), mix]}>
+      <button {...buttonProps} mix={[...buttonVariants({ variant, size }), mix]}>
         {children}
       </button>
     )
@@ -20,10 +110,10 @@ export function Button(handle: Handle<ButtonProps>): () => RemixNode {
 
 export function LinkButton(handle: Handle<LinkButtonProps>): () => RemixNode {
   return () => {
-    let { children, mix, size, tone, ...anchorProps } = handle.props
+    let { children, mix, variant, size, ...anchorProps } = handle.props
 
     return (
-      <a {...anchorProps} mix={[button({ size, tone }), mix]}>
+      <a {...anchorProps} mix={[...buttonVariants({ variant, size }), mix]}>
         {children}
       </a>
     )

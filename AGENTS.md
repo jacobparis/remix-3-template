@@ -33,19 +33,23 @@ Other skills in `.agents/skills/`:
 - `app/actions/home-page.tsx` and `app/actions/document.tsx` render the route-owned starter UI. `document.tsx` loads Inter and JetBrains Mono and sets `color-scheme: light dark`
 - `app/actions/public/` contains the browser runtime entry and the interactive `clientEntry` components
 - `app/ui/public/tokens.ts` holds the values every `remix/ui` component is styled with; import these instead of hard-coding colors, spacing, or type sizes
-- `app/ui/public/` holds the app's shared components: `Container`, `Card`/`CardHeader`/`CardFooter`, `Text`/`Caption`/`Code`/`VisuallyHidden`, `Field`/`TextField`/`Fieldset`/`CheckboxField`/`RadioField`/`ToggleField`, `Button`/`LinkButton`, and `Divider`
+- `app/ui/public/` holds the shared components, ported from shadcn/ui's shape: `Container`, `Card`/`CardHeader`/`CardTitle`/`CardDescription`/`CardAction`/`CardContent`/`CardFooter`, `Field`/`TextField`/`Fieldset`/`CheckboxField`/`RadioField`/`ToggleField`, `Button`/`LinkButton`, and `Divider`
+- `app/ui/public/text.ts` holds the text utility mixins: `fontXs` through `font2xl` (each sets font size and line height together), `fontMedium`, `fontSemibold`, `fontMono`, `textPrimary`, `textSecondary`, `truncate`, and `visuallyHidden`
 - `app/ui/brand.tsx` holds the Remix wordmark
-
-## Share components, not styles
-
-- Never export a `css()` constant or any other style value for reuse. Style constants stay private to the module that defines them.
-- When a style is needed in more than one place, write a Remix 3 component in `app/ui/public/` that owns that style and export the component. Check the existing components there first.
-- A shared component destructures `mix` and the element props, then renders `mix={[ownCss, mix]}` so callers can add layout, such as a grid column or a width, without replacing the component's own styling.
-- Wrap `remix/ui` style helpers the same way: use `Button` and `LinkButton` rather than putting `button()` on elements directly, and the field components rather than `input()`, `checkbox()`, `radio()`, or `toggle()`.
-- One-off layout for a single screen stays a private `css()` constant in that screen's file.
-- `tokens.ts` is the one shared style module, and it holds values only.
 - `app/assets.ts` owns the server-side asset pipeline used by the asset route and render middleware
 - Root `public/` contains static files served unchanged from the app root
+
+## Styling
+
+- Write `css()` inline in the `mix` prop: `mix={css({ display: 'grid', gap: tokens.space.lg })}`. Do not assign styles to module constants. The runtime caches rules by content, so an inline call adds no extra rules.
+- Compose with arrays: `mix={[fontSm, textSecondary, css({ margin: 0 })]}`. Use `text.ts` utilities for type instead of setting `fontSize` or `lineHeight` by hand, and use `<code mix={[fontXs, fontMono, textSecondary]}>` or `<span mix={visuallyHidden}>` on plain elements. Do not wrap text in components.
+- Text utilities are the only exported styles. When anything else is needed in more than one place, write a component in `app/ui/public/` and check the existing ones first.
+- Build cards the shadcn way: `<Card>` contains `<CardHeader>` (with `<CardTitle>`, optional `<CardDescription>`, and an optional `<CardAction>` that sits in the top-right), then `<CardContent>`, then an optional `<CardFooter>`. Each part carries a `data-slot`, and callers add layout, such as a grid on `CardContent` or a border on `CardFooter`, through `mix`.
+- A shared component destructures `mix` and the element props, then renders `mix={[css({...}), mix]}` so callers can extend it without replacing its styling.
+- Build variant components the shadcn way, as in `button.tsx`. Import the `remix/ui` mixin for behavior, then mix in order: a `reset` that clears every property a variant could decide (background, color, border, radius, shadow, font, height, padding), a shared `base`, then `variants[variant]` and `sizes[size]`, and the caller's `mix` last. Every layer only adds styles, so callers never need to undo one. A variant component is the one place where `css()` maps are module constants.
+- `Button` and `LinkButton` take `variant` (`default`, `secondary`, `outline`, `ghost`, `destructive`, `link`) and `size` (`sm`, `default`, `lg`, `icon`). Use `buttonVariants({ variant, size })` to give another element the same styles.
+- Use `Button` and `LinkButton` rather than putting `button()` on elements, and the field components rather than `input()`, `checkbox()`, `radio()`, or `toggle()`. The one exception is `input.root()` and `input.field()` for an input with a leading icon.
+- Use the `style` prop, not `css()`, for per-item dynamic values such as a swatch color.
 
 ## Writing
 

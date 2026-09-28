@@ -19,7 +19,7 @@ export function Document(handle: Handle<DocumentProps>) {
     let { href, importMap, preloads } = scriptEntry
 
     return (
-      <html lang="en" mix={htmlStyle}>
+      <html lang="en" mix={css({ colorScheme: 'light dark' })}>
         <head>
           <meta charSet="utf-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -39,27 +39,25 @@ export function Document(handle: Handle<DocumentProps>) {
           ))}
           <script type="module" src={href}></script>
         </head>
-        <body mix={bodyStyle}>{children}</body>
+        <body
+          mix={css({
+            margin: 0,
+            minHeight: '100vh',
+            background: tokens.surface.lvl1,
+            color: tokens.colors.text.primary,
+            fontFamily: tokens.fontFamily.sans,
+            fontSize: tokens.fontSize.md,
+            lineHeight: tokens.lineHeight.normal,
+            fontFeatureSettings: '"cv01" on, "ss01" on',
+            WebkitFontSmoothing: 'antialiased',
+            MozOsxFontSmoothing: 'grayscale',
+            '& *, & *::before, & *::after': { boxSizing: 'border-box' },
+            '& ::selection': { background: '#FFDF5F', color: '#151515' },
+          })}
+        >
+          {children}
+        </body>
       </html>
     )
   }
 }
-
-const htmlStyle = css({
-  colorScheme: 'light dark',
-})
-
-const bodyStyle = css({
-  margin: 0,
-  minHeight: '100vh',
-  background: tokens.surface.lvl1,
-  color: tokens.colors.text.primary,
-  fontFamily: tokens.fontFamily.sans,
-  fontSize: tokens.fontSize.md,
-  lineHeight: tokens.lineHeight.normal,
-  fontFeatureSettings: '"cv01" on, "ss01" on',
-  WebkitFontSmoothing: 'antialiased',
-  MozOsxFontSmoothing: 'grayscale',
-  '& *, & *::before, & *::after': { boxSizing: 'border-box' },
-  '& ::selection': { background: '#FFDF5F', color: '#151515' },
-})

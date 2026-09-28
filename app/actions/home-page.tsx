@@ -1,17 +1,30 @@
-import { css } from "remix/ui";
-import type { Handle, RemixNode } from "remix/ui";
-import { Breadcrumbs } from "remix/ui/breadcrumbs";
+import { css } from 'remix/ui'
+import type { Handle, RemixNode } from 'remix/ui'
+import { Breadcrumbs } from 'remix/ui/breadcrumbs'
 
-import { GitHubIcon, RemixWordmark } from "../ui/brand.tsx";
-import { Foundations } from "../ui/foundations.tsx";
-import { LinkButton } from "../ui/public/button.tsx";
-import { Container } from "../ui/public/container.tsx";
-import { Code } from "../ui/public/text.tsx";
-import { componentStyleValues as tokens } from "../ui/public/tokens.ts";
-import { Document } from "./document.tsx";
-import { Deployments } from "./public/deployments.tsx";
-import { Faq } from "./public/faq.tsx";
-import { ProjectSettings } from "./public/project-settings.tsx";
+import { GitHubIcon, RemixWordmark } from '../ui/brand.tsx'
+import { Foundations } from '../ui/foundations.tsx'
+import { LinkButton } from '../ui/public/button.tsx'
+import { Container } from '../ui/public/container.tsx'
+import {
+  font2xl,
+  fontLg,
+  fontMono,
+  fontSemibold,
+  fontSm,
+  textSecondary,
+} from '../ui/public/text.ts'
+import { componentStyleValues as tokens } from '../ui/public/tokens.ts'
+import { Document } from './document.tsx'
+import { Deployments } from './public/deployments.tsx'
+import { Faq } from './public/faq.tsx'
+import { ProjectSettings } from './public/project-settings.tsx'
+
+const navLinks = [
+  { href: '#foundations', label: 'Foundations' },
+  { href: '#components', label: 'Components' },
+  { href: 'https://api.remix.run', label: 'API' },
+]
 
 export function HomePage() {
   return () => (
@@ -19,10 +32,7 @@ export function HomePage() {
       <SiteHeader />
       <main>
         <Hero />
-        <Section
-          id="foundations"
-          title="Every component reads from one set of light-dark tokens"
-        >
+        <Section id="foundations" title="Every component reads from one set of light-dark tokens">
           <Foundations />
         </Section>
         <Section
@@ -31,14 +41,29 @@ export function HomePage() {
         >
           <Breadcrumbs
             items={[
-              { href: "#", label: "Acme" },
-              { href: "#", label: "bookstore" },
-              { label: "Settings" },
+              { href: '#', label: 'Acme' },
+              { href: '#', label: 'bookstore' },
+              { label: 'Settings' },
             ]}
           />
-          <div mix={componentsGridStyle}>
+          <div
+            mix={css({
+              display: 'grid',
+              gridTemplateColumns: 'minmax(0, 7fr) minmax(0, 5fr)',
+              gap: tokens.space.lg,
+              alignItems: 'start',
+              '@media (max-width: 960px)': { gridTemplateColumns: 'minmax(0, 1fr)' },
+            })}
+          >
             <ProjectSettings />
-            <div mix={columnStyle}>
+            <div
+              mix={css({
+                display: 'flex',
+                flexDirection: 'column',
+                gap: tokens.space.lg,
+                minWidth: 0,
+              })}
+            >
               <Deployments />
               <Faq />
             </div>
@@ -47,205 +72,178 @@ export function HomePage() {
       </main>
       <SiteFooter />
     </Document>
-  );
+  )
 }
 
 function SiteHeader() {
   return () => (
-    <header mix={siteHeaderStyle}>
-      <Container mix={headerInnerStyle}>
-        <a href="/" mix={brandLinkStyle} aria-label="Remix UI home">
+    <header
+      mix={css({
+        position: 'sticky',
+        top: 0,
+        zIndex: 10,
+        background: tokens.surface.lvl1,
+        borderBlockEnd: `1px solid ${tokens.colors.border.subtle}`,
+      })}
+    >
+      <Container
+        mix={css({
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: tokens.space.lg,
+          height: '56px',
+        })}
+      >
+        <a
+          href="/"
+          aria-label="Remix UI home"
+          mix={css({
+            display: 'inline-flex',
+            alignItems: 'center',
+            color: tokens.colors.text.primary,
+          })}
+        >
           <RemixWordmark height={14} />
         </a>
-        <nav aria-label="Primary" mix={navStyle}>
-          <LinkButton href="#foundations" tone="ghost" mix={hideOnMobile}>
-            Foundations
-          </LinkButton>
-          <LinkButton href="#components" tone="ghost" mix={hideOnMobile}>
-            Components
-          </LinkButton>
-          <LinkButton
-            href="https://api.remix.run"
-            tone="ghost"
-            mix={hideOnMobile}
-          >
-            API
-          </LinkButton>
+        <nav
+          aria-label="Primary"
+          mix={css({ display: 'flex', alignItems: 'center', gap: tokens.space.xs })}
+        >
+          {navLinks.map((link) => (
+            <LinkButton
+              key={link.href}
+              href={link.href}
+              variant="ghost"
+              size="sm"
+              mix={css({ '@media (max-width: 640px)': { display: 'none' } })}
+            >
+              {link.label}
+            </LinkButton>
+          ))}
           <LinkButton
             href="https://github.com/remix-run/remix"
             aria-label="Remix on GitHub"
-            tone="ghost"
-            mix={iconButtonStyle}
+            variant="ghost"
+            size="icon"
           >
             <GitHubIcon />
           </LinkButton>
         </nav>
       </Container>
     </header>
-  );
+  )
 }
 
 function Hero() {
   return () => (
     <Container>
-      <section mix={heroStyle} aria-labelledby="hero-title">
-        <h1 mix={heroTitleStyle} id="hero-title">
+      <section
+        aria-labelledby="hero-title"
+        mix={css({
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '20px',
+          paddingBlock: '72px 40px',
+          '@media (max-width: 640px)': { paddingBlock: '40px 24px' },
+        })}
+      >
+        <h1
+          id="hero-title"
+          mix={css({
+            margin: 0,
+            maxWidth: '760px',
+            fontSize: 'clamp(28px, 4.4vw, 44px)',
+            fontWeight: 650,
+            lineHeight: 1.1,
+            letterSpacing: '-0.025em',
+            textWrap: 'balance',
+          })}
+        >
           Remix 3 components render on the server and hydrate without React
         </h1>
-        <p mix={heroLeadStyle}>
-          Each component is a setup function that returns a render function.
-          Styles attach through the css() mixin, and every color resolves with
-          light-dark(), so the page follows the visitor&apos;s system theme.
+        <p
+          mix={[
+            fontLg,
+            textSecondary,
+            css({ margin: 0, maxWidth: '640px', textWrap: 'pretty' }),
+          ]}
+        >
+          Each component is a setup function that returns a render function. Styles attach through
+          the css() mixin, and every color resolves with light-dark(), so the page follows the
+          visitor&apos;s system theme.
         </p>
-        <div mix={heroActionsStyle}>
-          <LinkButton href="#components" tone="primary" size="lg">
+        <div
+          mix={css({
+            display: 'flex',
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            gap: tokens.space.sm,
+          })}
+        >
+          <LinkButton href="#components" size="lg">
             Browse components
           </LinkButton>
-          <LinkButton href="https://guides.remix.run" size="lg">
+          <LinkButton href="https://guides.remix.run" variant="outline" size="lg">
             Read the guides
           </LinkButton>
-          <Code mix={installStyle}>npm i remix</Code>
+          <code
+            mix={[fontSm, fontMono, textSecondary, css({ marginInlineStart: tokens.space.sm })]}
+          >
+            npm i remix
+          </code>
         </div>
       </section>
     </Container>
-  );
+  )
 }
 
-function Section(
-  handle: Handle<{ id: string; title: string; children: RemixNode }>,
-) {
+function Section(handle: Handle<{ id: string; title: string; children: RemixNode }>) {
   return () => (
     <Container>
-      <section id={handle.props.id} mix={sectionStyle}>
-        <h2 mix={sectionTitleStyle}>{handle.props.title}</h2>
+      <section
+        id={handle.props.id}
+        mix={css({
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '20px',
+          paddingBlock: '40px',
+        })}
+      >
+        <h2
+          mix={[
+            font2xl,
+            fontSemibold,
+            css({ margin: 0, maxWidth: '760px', textWrap: 'balance' }),
+          ]}
+        >
+          {handle.props.title}
+        </h2>
         {handle.props.children}
       </section>
     </Container>
-  );
+  )
 }
 
 function SiteFooter() {
   return () => (
     <footer>
       <Container>
-        <p mix={footerStyle}>Remix docs and examples are licensed under MIT.</p>
+        <p
+          mix={[
+            fontSm,
+            textSecondary,
+            css({
+              margin: 0,
+              paddingBlock: '32px 48px',
+              marginBlockStart: '24px',
+              borderBlockStart: `1px solid ${tokens.colors.border.subtle}`,
+            }),
+          ]}
+        >
+          Remix docs and examples are licensed under MIT.
+        </p>
       </Container>
     </footer>
-  );
+  )
 }
-
-const siteHeaderStyle = css({
-  position: "sticky",
-  top: 0,
-  zIndex: 10,
-  background: tokens.surface.lvl1,
-  borderBlockEnd: `1px solid ${tokens.colors.border.subtle}`,
-});
-
-const headerInnerStyle = css({
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "space-between",
-  gap: tokens.space.lg,
-  height: "56px",
-});
-
-const brandLinkStyle = css({
-  display: "inline-flex",
-  alignItems: "center",
-  color: tokens.colors.text.primary,
-});
-
-const navStyle = css({
-  display: "flex",
-  alignItems: "center",
-  gap: tokens.space.xs,
-});
-
-const hideOnMobile = css({ "@media (max-width: 640px)": { display: "none" } });
-
-const iconButtonStyle = css({
-  paddingInline: "7px",
-  "& svg": { width: "14px", height: "14px" },
-});
-
-const heroStyle = css({
-  display: "flex",
-  flexDirection: "column",
-  gap: "20px",
-  maxWidth: "1120px",
-  paddingBlock: "72px 40px",
-  "@media (max-width: 640px)": { paddingBlock: "40px 24px" },
-});
-
-const heroTitleStyle = css({
-  margin: 0,
-  maxWidth: "760px",
-  fontSize: "clamp(28px, 4.4vw, 44px)",
-  fontWeight: 650,
-  lineHeight: 1.1,
-  letterSpacing: "-0.025em",
-  textWrap: "balance",
-});
-
-const heroLeadStyle = css({
-  margin: 0,
-  maxWidth: "640px",
-  fontSize: "16px",
-  lineHeight: tokens.lineHeight.relaxed,
-  color: tokens.colors.text.secondary,
-  textWrap: "pretty",
-});
-
-const heroActionsStyle = css({
-  display: "flex",
-  flexWrap: "wrap",
-  alignItems: "center",
-  gap: tokens.space.sm,
-});
-
-const installStyle = css({
-  fontSize: tokens.fontSize.sm,
-  marginInlineStart: tokens.space.sm,
-});
-
-const sectionStyle = css({
-  display: "flex",
-  flexDirection: "column",
-  gap: "20px",
-  paddingBlock: "40px",
-});
-
-const sectionTitleStyle = css({
-  margin: 0,
-  maxWidth: "760px",
-  fontSize: "22px",
-  fontWeight: 600,
-  lineHeight: 1.25,
-  letterSpacing: "-0.015em",
-  textWrap: "balance",
-});
-
-const componentsGridStyle = css({
-  display: "grid",
-  gridTemplateColumns: "minmax(0, 7fr) minmax(0, 5fr)",
-  gap: tokens.space.lg,
-  alignItems: "start",
-  "@media (max-width: 960px)": { gridTemplateColumns: "minmax(0, 1fr)" },
-});
-
-const columnStyle = css({
-  display: "flex",
-  flexDirection: "column",
-  gap: tokens.space.lg,
-  minWidth: 0,
-});
-
-const footerStyle = css({
-  margin: 0,
-  paddingBlock: "32px 48px",
-  marginBlockStart: "24px",
-  borderBlockStart: `1px solid ${tokens.colors.border.subtle}`,
-  fontSize: tokens.fontSize.sm,
-  color: tokens.colors.text.secondary,
-});
