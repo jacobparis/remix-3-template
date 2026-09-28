@@ -1,9 +1,5 @@
 import { clientEntry, css } from 'remix/ui'
 import type { Handle } from 'remix/ui'
-import { Combobox, ComboboxOption } from 'remix/ui/combobox'
-import { Option, Select } from 'remix/ui/select'
-import { Tab, TabList, TabPanel, Tabs } from 'remix/ui/tabs'
-
 import { Button } from '../../ui/public/button.tsx'
 import {
   Card,
@@ -13,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from '../../ui/public/card.tsx'
+import { Combobox, ComboboxOption } from '../../ui/public/combobox.tsx'
 import { Divider } from '../../ui/public/divider.tsx'
 import {
   CheckboxField,
@@ -22,6 +19,8 @@ import {
   TextField,
   ToggleField,
 } from '../../ui/public/field.tsx'
+import { Select, SelectOption } from '../../ui/public/select.tsx'
+import { Tab, TabList, TabPanel, Tabs } from '../../ui/public/tabs.tsx'
 import { componentStyleValues as tokens } from '../../ui/public/tokens.ts'
 
 const frameworks = [
@@ -76,15 +75,9 @@ export const ProjectSettings = clientEntry(
                         defaultValue="iad1"
                         name="region"
                       >
-                        <Option label="Washington, D.C." value="iad1">
-                          Washington, D.C.
-                        </Option>
-                        <Option label="Frankfurt" value="fra1">
-                          Frankfurt
-                        </Option>
-                        <Option label="Tokyo" value="hnd1">
-                          Tokyo
-                        </Option>
+                        <SelectOption label="Washington, D.C." value="iad1" />
+                        <SelectOption label="Frankfurt" value="fra1" />
+                        <SelectOption label="Tokyo" value="hnd1" />
                       </Select>
                     </Field>
                   </div>

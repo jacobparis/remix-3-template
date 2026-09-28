@@ -1,10 +1,9 @@
 import { clientEntry, css, on } from 'remix/ui'
 import type { Handle } from 'remix/ui'
-import input from 'remix/ui/input'
-import { Menu, MenuItem } from 'remix/ui/menu'
-import { onMenuSelect } from 'remix/ui/menu/primitives'
-
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from '../../ui/public/card.tsx'
+import { SearchIcon } from '../../ui/public/icons.tsx'
+import { InputGroup, InputGroupInput } from '../../ui/public/input.tsx'
+import { Menu, MenuItem, onMenuSelect } from '../../ui/public/menu.tsx'
 import {
   fontMedium,
   fontMono,
@@ -63,23 +62,17 @@ export const Deployments = clientEntry(import.meta.url, function Deployments(han
           </CardAction>
         </CardHeader>
         <CardContent mix={css({ display: 'grid', gap: tokens.space.lg })}>
-          <div mix={input.root()}>
-            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <circle cx="7" cy="7" r="4.75" stroke="currentColor" stroke-width="1.5" />
-              <path d="m10.5 10.5 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-            </svg>
-            <input
+          <InputGroup>
+            <SearchIcon />
+            <InputGroupInput
               aria-label="Filter deployments"
-              mix={[
-                input.field(),
-                on('input', (event) => {
-                  query = event.currentTarget.value
-                  void handle.update()
-                }),
-              ]}
+              mix={on('input', (event) => {
+                query = event.currentTarget.value
+                void handle.update()
+              })}
               placeholder="Filter by branch or message"
             />
-          </div>
+          </InputGroup>
           <ul mix={css({ listStyle: 'none', margin: 0, padding: 0, display: 'grid' })}>
             {visible.map((deployment) => (
               <li

@@ -1,9 +1,9 @@
 import { css } from 'remix/ui'
 import type { Handle, RemixNode } from 'remix/ui'
-import { Breadcrumbs } from 'remix/ui/breadcrumbs'
 
 import { GitHubIcon, RemixWordmark } from '../ui/brand.tsx'
 import { Foundations } from '../ui/foundations.tsx'
+import { Breadcrumbs } from '../ui/public/breadcrumbs.tsx'
 import { LinkButton } from '../ui/public/button.tsx'
 import { Container } from '../ui/public/container.tsx'
 import {

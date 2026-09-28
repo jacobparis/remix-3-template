@@ -1,10 +1,13 @@
 import { css } from 'remix/ui'
 import type { Handle, Props, RemixNode } from 'remix/ui'
-import checkbox from 'remix/ui/checkbox'
-import input from 'remix/ui/input'
-import radio from 'remix/ui/radio'
-import toggle from 'remix/ui/toggle'
-
+import { Checkbox } from './checkbox.tsx'
+import type { CheckboxProps } from './checkbox.tsx'
+import { Input } from './input.tsx'
+import type { InputProps } from './input.tsx'
+import { Radio } from './radio.tsx'
+import type { RadioProps } from './radio.tsx'
+import { Toggle } from './toggle.tsx'
+import type { ToggleProps } from './toggle.tsx'
 import { fontMedium, fontSm, fontXs, textPrimary, textSecondary } from './text.ts'
 import { componentStyleValues as tokens } from './tokens.ts'
 
@@ -15,13 +18,15 @@ export type FieldProps = {
   children: RemixNode
 }
 
-export type TextFieldProps = Props<'input'> & { id: string; label: RemixNode }
+export type TextFieldProps = InputProps & { id: string; label: RemixNode }
 
 export type FieldsetProps = { legend: RemixNode; children: RemixNode }
 
-export type ChoiceFieldProps = Props<'input'> & { label: RemixNode }
+export type CheckboxFieldProps = CheckboxProps & { label: RemixNode }
 
-export type ToggleFieldProps = Props<'input'> & { label: RemixNode; description?: RemixNode }
+export type RadioFieldProps = RadioProps & { label: RemixNode }
+
+export type ToggleFieldProps = ToggleProps & { label: RemixNode; description?: RemixNode }
 
 export function Field(handle: Handle<FieldProps>): () => RemixNode {
   return () => {
@@ -40,11 +45,11 @@ export function Field(handle: Handle<FieldProps>): () => RemixNode {
 
 export function TextField(handle: Handle<TextFieldProps>): () => RemixNode {
   return () => {
-    let { id, label, mix, ...inputProps } = handle.props
+    let { id, label, ...inputProps } = handle.props
 
     return (
       <Field label={label} controlId={id}>
-        <input {...inputProps} id={id} mix={[input(), mix]} />
+        <Input {...inputProps} id={id} />
       </Field>
     )
   }
@@ -72,9 +77,9 @@ export function Fieldset(handle: Handle<FieldsetProps>): () => RemixNode {
   )
 }
 
-export function CheckboxField(handle: Handle<ChoiceFieldProps>): () => RemixNode {
+export function CheckboxField(handle: Handle<CheckboxFieldProps>): () => RemixNode {
   return () => {
-    let { label, mix, ...inputProps } = handle.props
+    let { label, ...inputProps } = handle.props
 
     return (
       <label
@@ -84,16 +89,16 @@ export function CheckboxField(handle: Handle<ChoiceFieldProps>): () => RemixNode
           css({ display: 'flex', alignItems: 'center', gap: tokens.space.sm, cursor: 'pointer' }),
         ]}
       >
-        <input {...inputProps} mix={[checkbox(), mix]} />
+        <Checkbox {...inputProps} />
         {label}
       </label>
     )
   }
 }
 
-export function RadioField(handle: Handle<ChoiceFieldProps>): () => RemixNode {
+export function RadioField(handle: Handle<RadioFieldProps>): () => RemixNode {
   return () => {
-    let { label, mix, ...inputProps } = handle.props
+    let { label, ...inputProps } = handle.props
 
     return (
       <label
@@ -103,7 +108,7 @@ export function RadioField(handle: Handle<ChoiceFieldProps>): () => RemixNode {
           css({ display: 'flex', alignItems: 'center', gap: tokens.space.sm, cursor: 'pointer' }),
         ]}
       >
-        <input {...inputProps} mix={[radio(), mix]} />
+        <Radio {...inputProps} />
         {label}
       </label>
     )
@@ -112,7 +117,7 @@ export function RadioField(handle: Handle<ChoiceFieldProps>): () => RemixNode {
 
 export function ToggleField(handle: Handle<ToggleFieldProps>): () => RemixNode {
   return () => {
-    let { label, description, mix, ...inputProps } = handle.props
+    let { label, description, ...inputProps } = handle.props
 
     return (
       <label
@@ -128,7 +133,7 @@ export function ToggleField(handle: Handle<ToggleFieldProps>): () => RemixNode {
           <span mix={[fontSm, fontMedium, textPrimary]}>{label}</span>
           {description ? <span mix={[fontSm, textSecondary]}>{description}</span> : null}
         </span>
-        <input {...inputProps} mix={[toggle(), mix]} />
+        <Toggle {...inputProps} />
       </label>
     )
   }

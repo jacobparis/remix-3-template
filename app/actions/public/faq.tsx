@@ -1,7 +1,11 @@
 import { clientEntry } from 'remix/ui'
 import type { Handle } from 'remix/ui'
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from 'remix/ui/accordion'
-
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '../../ui/public/accordion.tsx'
 import { Card, CardContent, CardHeader, CardTitle } from '../../ui/public/card.tsx'
 
 export const Faq = clientEntry(import.meta.url, function Faq(_handle: Handle) {
