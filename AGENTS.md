@@ -33,7 +33,17 @@ Other skills in `.agents/skills/`:
 - `app/actions/home-page.tsx` and `app/actions/document.tsx` render the route-owned starter UI. `document.tsx` loads Inter and JetBrains Mono and sets `color-scheme: light dark`
 - `app/actions/public/` contains the browser runtime entry and the interactive `clientEntry` components
 - `app/ui/public/tokens.ts` holds the values every `remix/ui` component is styled with; import these instead of hard-coding colors, spacing, or type sizes
-- `app/ui/public/styles.ts` holds shared layout and text mixins; `app/ui/brand.tsx` holds the Remix wordmark
+- `app/ui/public/` holds the app's shared components: `Container`, `Card`/`CardHeader`/`CardFooter`, `Text`/`Caption`/`Code`/`VisuallyHidden`, `Field`/`TextField`/`Fieldset`/`CheckboxField`/`RadioField`/`ToggleField`, `Button`/`LinkButton`, and `Divider`
+- `app/ui/brand.tsx` holds the Remix wordmark
+
+## Share components, not styles
+
+- Never export a `css()` constant or any other style value for reuse. Style constants stay private to the module that defines them.
+- When a style is needed in more than one place, write a Remix 3 component in `app/ui/public/` that owns that style and export the component. Check the existing components there first.
+- A shared component destructures `mix` and the element props, then renders `mix={[ownCss, mix]}` so callers can add layout, such as a grid column or a width, without replacing the component's own styling.
+- Wrap `remix/ui` style helpers the same way: use `Button` and `LinkButton` rather than putting `button()` on elements directly, and the field components rather than `input()`, `checkbox()`, `radio()`, or `toggle()`.
+- One-off layout for a single screen stays a private `css()` constant in that screen's file.
+- `tokens.ts` is the one shared style module, and it holds values only.
 - `app/assets.ts` owns the server-side asset pipeline used by the asset route and render middleware
 - Root `public/` contains static files served unchanged from the app root
 

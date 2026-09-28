@@ -2,14 +2,12 @@ import { clientEntry } from 'remix/ui'
 import type { Handle } from 'remix/ui'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from 'remix/ui/accordion'
 
-import { cardStyle, cardTitleStyle } from '../../ui/public/styles.ts'
+import { Card, CardHeader } from '../../ui/public/card.tsx'
 
 export const Faq = clientEntry(import.meta.url, function Faq(_handle: Handle) {
   return () => (
-    <section mix={cardStyle} aria-labelledby="faq-title">
-      <h3 mix={cardTitleStyle} id="faq-title">
-        Common questions
-      </h3>
+    <Card aria-labelledby="faq-title">
+      <CardHeader title="Common questions" titleId="faq-title" />
       <Accordion defaultValue="react">
         <AccordionItem value="react">
           <AccordionTrigger>Is this React?</AccordionTrigger>
@@ -33,6 +31,6 @@ export const Faq = clientEntry(import.meta.url, function Faq(_handle: Handle) {
           </AccordionContent>
         </AccordionItem>
       </Accordion>
-    </section>
+    </Card>
   )
 })

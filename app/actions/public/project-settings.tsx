@@ -1,201 +1,155 @@
-import { clientEntry, css } from 'remix/ui'
-import type { Handle } from 'remix/ui'
-import button from 'remix/ui/button'
-import checkbox from 'remix/ui/checkbox'
-import { Combobox, ComboboxOption } from 'remix/ui/combobox'
-import input from 'remix/ui/input'
-import radio from 'remix/ui/radio'
-import { Option, Select } from 'remix/ui/select'
-import { Tab, TabList, TabPanel, Tabs } from 'remix/ui/tabs'
-import toggle from 'remix/ui/toggle'
+import { clientEntry, css } from "remix/ui";
+import type { Handle } from "remix/ui";
+import { Combobox, ComboboxOption } from "remix/ui/combobox";
+import { Option, Select } from "remix/ui/select";
+import { Tab, TabList, TabPanel, Tabs } from "remix/ui/tabs";
 
+import { Button } from "../../ui/public/button.tsx";
+import { Card, CardFooter, CardHeader } from "../../ui/public/card.tsx";
+import { Divider } from "../../ui/public/divider.tsx";
 import {
-  cardStyle,
-  cardTitleStyle,
-  dividerStyle,
-  fieldStyle,
-  inlineLabelStyle,
-  labelStyle,
-  mutedTextStyle,
-} from '../../ui/public/styles.ts'
-import { componentStyleValues as tokens } from '../../ui/public/tokens.ts'
+  CheckboxField,
+  Field,
+  Fieldset,
+  RadioField,
+  TextField,
+  ToggleField,
+} from "../../ui/public/field.tsx";
+import { componentStyleValues as tokens } from "../../ui/public/tokens.ts";
 
 const frameworks = [
-  { label: 'Remix', searchValue: ['remix', 'rmx'], value: 'remix' },
-  { label: 'Hono', value: 'hono' },
-  { label: 'Astro', value: 'astro' },
-  { label: 'SvelteKit', searchValue: ['svelte', 'kit'], value: 'sveltekit' },
-]
+  { label: "Remix", searchValue: ["remix", "rmx"], value: "remix" },
+  { label: "Hono", value: "hono" },
+  { label: "Astro", value: "astro" },
+  { label: "SvelteKit", searchValue: ["svelte", "kit"], value: "sveltekit" },
+];
 
 export const ProjectSettings = clientEntry(
   import.meta.url,
   function ProjectSettings(_handle: Handle) {
     return () => (
-      <form mix={cardStyle} method="post" action="#" aria-label="Project settings">
-        <div mix={headerStyle}>
-          <h3 mix={cardTitleStyle}>Project settings</h3>
-          <p mix={mutedTextStyle}>Changes apply to every environment.</p>
-        </div>
-        <Tabs defaultActiveTab="general">
-          <TabList aria-label="Settings sections">
-            <Tab name="general">General</Tab>
-            <Tab name="notifications">Notifications</Tab>
-            <Tab name="access">Access</Tab>
-          </TabList>
-          <TabPanel name="general">
-            <div mix={panelStyle}>
-              <div mix={gridStyle}>
-                <label mix={fieldStyle}>
-                  <span mix={labelStyle}>Project name</span>
-                  <input mix={input()} name="name" defaultValue="bookstore" />
-                </label>
-                <div mix={fieldStyle}>
-                  <span mix={labelStyle} id="region-label">
-                    Region
-                  </span>
-                  <Select
-                    aria-labelledby="region-label"
-                    defaultLabel="Washington, D.C."
-                    defaultValue="iad1"
-                    name="region"
+      <Card aria-labelledby="settings-title">
+        <CardHeader
+          title="Project settings"
+          titleId="settings-title"
+          description="Changes apply to every environment."
+        />
+        <form mix={formStyle} method="post" action="#">
+          <Tabs defaultActiveTab="general">
+            <TabList aria-label="Settings sections">
+              <Tab name="general">General</Tab>
+              <Tab name="notifications">Notifications</Tab>
+              <Tab name="access">Access</Tab>
+            </TabList>
+            <TabPanel name="general">
+              <div mix={panelStyle}>
+                <div mix={gridStyle}>
+                  <TextField
+                    id="project-name"
+                    label="Project name"
+                    name="name"
+                    defaultValue="bookstore"
+                  />
+                  <Field label="Region" labelId="region-label">
+                    <Select
+                      aria-labelledby="region-label"
+                      defaultLabel="Washington, D.C."
+                      defaultValue="iad1"
+                      name="region"
+                    >
+                      <Option label="Washington, D.C." value="iad1">
+                        Washington, D.C.
+                      </Option>
+                      <Option label="Frankfurt" value="fra1">
+                        Frankfurt
+                      </Option>
+                      <Option label="Tokyo" value="hnd1">
+                        Tokyo
+                      </Option>
+                    </Select>
+                  </Field>
+                </div>
+                <Field label="Framework" controlId="framework">
+                  <Combobox
+                    inputId="framework"
+                    name="framework"
+                    placeholder="Search frameworks"
                   >
-                    <Option label="Washington, D.C." value="iad1">
-                      Washington, D.C.
-                    </Option>
-                    <Option label="Frankfurt" value="fra1">
-                      Frankfurt
-                    </Option>
-                    <Option label="Tokyo" value="hnd1">
-                      Tokyo
-                    </Option>
-                  </Select>
-                </div>
+                    {frameworks.map((framework) => (
+                      <ComboboxOption key={framework.value} {...framework} />
+                    ))}
+                  </Combobox>
+                </Field>
+                <Fieldset legend="Visibility">
+                  <RadioField
+                    label="Private"
+                    name="visibility"
+                    value="private"
+                    defaultChecked
+                  />
+                  <RadioField label="Team" name="visibility" value="team" />
+                  <RadioField label="Public" name="visibility" value="public" />
+                </Fieldset>
               </div>
-              <div mix={fieldStyle}>
-                <label mix={labelStyle} for="framework">
-                  Framework
-                </label>
-                <Combobox inputId="framework" name="framework" placeholder="Search frameworks">
-                  {frameworks.map((framework) => (
-                    <ComboboxOption key={framework.value} {...framework} />
-                  ))}
-                </Combobox>
+            </TabPanel>
+            <TabPanel name="notifications">
+              <div mix={panelStyle}>
+                <ToggleField
+                  label="Deploy notifications"
+                  description="Email the team when a deploy finishes."
+                  name="deployEmails"
+                  defaultChecked
+                />
+                <Divider />
+                <ToggleField
+                  label="Weekly digest"
+                  description="A Monday summary of traffic and errors."
+                  name="digest"
+                />
+                <Divider />
+                <CheckboxField
+                  label="Notify me when I am mentioned"
+                  name="mentions"
+                  defaultChecked
+                />
               </div>
-              <fieldset mix={fieldsetStyle}>
-                <legend mix={labelStyle}>Visibility</legend>
-                <div mix={optionRowStyle}>
-                  <label mix={inlineLabelStyle}>
-                    <input mix={radio()} name="visibility" value="private" defaultChecked />
-                    Private
-                  </label>
-                  <label mix={inlineLabelStyle}>
-                    <input mix={radio()} name="visibility" value="team" />
-                    Team
-                  </label>
-                  <label mix={inlineLabelStyle}>
-                    <input mix={radio()} name="visibility" value="public" />
-                    Public
-                  </label>
-                </div>
-              </fieldset>
-            </div>
-          </TabPanel>
-          <TabPanel name="notifications">
-            <div mix={panelStyle}>
-              <label mix={switchRowStyle}>
-                <span>
-                  <span mix={rowTitleStyle}>Deploy notifications</span>
-                  <span mix={mutedTextStyle}>Email the team when a deploy finishes.</span>
-                </span>
-                <input mix={toggle()} name="deployEmails" defaultChecked />
-              </label>
-              <hr mix={dividerStyle} />
-              <label mix={switchRowStyle}>
-                <span>
-                  <span mix={rowTitleStyle}>Weekly digest</span>
-                  <span mix={mutedTextStyle}>A Monday summary of traffic and errors.</span>
-                </span>
-                <input mix={toggle()} name="digest" />
-              </label>
-              <hr mix={dividerStyle} />
-              <label mix={inlineLabelStyle}>
-                <input mix={checkbox()} name="mentions" defaultChecked />
-                Notify me when I am mentioned
-              </label>
-            </div>
-          </TabPanel>
-          <TabPanel name="access">
-            <div mix={panelStyle}>
-              <label mix={inlineLabelStyle}>
-                <input mix={checkbox()} name="sso" defaultChecked />
-                Require single sign-on
-              </label>
-              <label mix={inlineLabelStyle}>
-                <input mix={checkbox()} name="previews" />
-                Protect preview deployments
-              </label>
-            </div>
-          </TabPanel>
-        </Tabs>
-        <div mix={footerStyle}>
-          <button type="reset" mix={button()}>
-            Cancel
-          </button>
-          <button type="submit" mix={button({ tone: 'primary' })}>
-            Save changes
-          </button>
-        </div>
-      </form>
-    )
+            </TabPanel>
+            <TabPanel name="access">
+              <div mix={panelStyle}>
+                <CheckboxField
+                  label="Require single sign-on"
+                  name="sso"
+                  defaultChecked
+                />
+                <CheckboxField
+                  label="Protect preview deployments"
+                  name="previews"
+                />
+              </div>
+            </TabPanel>
+          </Tabs>
+          <CardFooter>
+            <Button type="reset">Cancel</Button>
+            <Button type="submit" tone="primary">
+              Save changes
+            </Button>
+          </CardFooter>
+        </form>
+      </Card>
+    );
   },
-)
+);
 
-const headerStyle = css({ display: 'grid', gap: '2px' })
+const formStyle = css({ display: "grid", gap: tokens.space.lg });
 
 const panelStyle = css({
-  display: 'grid',
+  display: "grid",
   gap: tokens.space.lg,
   paddingBlockStart: tokens.space.lg,
-})
+});
 
 const gridStyle = css({
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+  display: "grid",
+  gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
   gap: tokens.space.md,
-})
-
-const fieldsetStyle = css({
-  display: 'grid',
-  gap: tokens.space.sm,
-  margin: 0,
-  padding: 0,
-  border: 0,
-})
-
-const optionRowStyle = css({
-  display: 'flex',
-  flexWrap: 'wrap',
-  gap: tokens.space.lg,
-})
-
-const switchRowStyle = css({
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  gap: tokens.space.lg,
-  cursor: 'pointer',
-  '& > span': { display: 'grid', gap: '2px' },
-})
-
-const rowTitleStyle = css({
-  fontSize: tokens.fontSize.sm,
-  fontWeight: tokens.fontWeight.medium,
-})
-
-const footerStyle = css({
-  display: 'flex',
-  justifyContent: 'flex-end',
-  gap: tokens.space.sm,
-  paddingBlockStart: tokens.space.lg,
-  borderBlockStart: `1px solid ${tokens.colors.border.subtle}`,
-})
+});

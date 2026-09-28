@@ -1,7 +1,8 @@
 import { css } from 'remix/ui'
 import type { Handle } from 'remix/ui'
 
-import { captionStyle, cardStyle, cardTitleStyle, monoFont } from './public/styles.ts'
+import { Card, CardHeader } from './public/card.tsx'
+import { Caption, Code } from './public/text.tsx'
 import { componentStyleValues as tokens } from './public/tokens.ts'
 
 const brandColors = [
@@ -29,8 +30,8 @@ const typeScale = [
 export function Foundations() {
   return () => (
     <div mix={gridStyle}>
-      <div mix={[cardStyle, wideStyle]}>
-        <h3 mix={cardTitleStyle}>Colors switch with the page between light and dark</h3>
+      <Card mix={wideStyle}>
+        <CardHeader title="Colors switch with the page between light and dark" />
         <SwatchGroup label="Brand" items={brandColors} />
         <SwatchGroup
           label="Surface"
@@ -46,13 +47,13 @@ export function Foundations() {
           label="Text"
           items={textColors.map(([name, value]) => ({ name, value }))}
         />
-      </div>
-      <div mix={cardStyle}>
-        <h3 mix={cardTitleStyle}>Inter carries every size from display to label</h3>
+      </Card>
+      <Card>
+        <CardHeader title="Inter carries every size from display to label" />
         <ul mix={stackStyle}>
           {typeScale.map((step) => (
             <li key={step.name} mix={typeRowStyle}>
-              <span mix={captionStyle}>{step.name}</span>
+              <Caption>{step.name}</Caption>
               <span
                 mix={typeSampleStyle}
                 style={{ fontSize: step.size, fontWeight: String(step.weight) }}
@@ -62,27 +63,27 @@ export function Foundations() {
             </li>
           ))}
         </ul>
-      </div>
-      <div mix={cardStyle}>
-        <h3 mix={cardTitleStyle}>Radius and spacing come in named steps</h3>
+      </Card>
+      <Card>
+        <CardHeader title="Radius and spacing come in named steps" />
         <div mix={rowWrapStyle}>
           {radii.map(([name, value]) => (
             <div key={name} mix={tokenTileStyle}>
               <span mix={radiusBoxStyle} style={{ borderRadius: value }} />
-              <span mix={captionStyle}>{name}</span>
+              <Caption>{name}</Caption>
             </div>
           ))}
         </div>
         <div mix={stackStyle}>
           {spaces.map(([name, value]) => (
             <div key={name} mix={spaceRowStyle}>
-              <span mix={[captionStyle, spaceLabelStyle]}>{name}</span>
+              <Caption mix={spaceLabelStyle}>{name}</Caption>
               <span mix={spaceBarStyle} style={{ width: value }} />
-              <span mix={valueStyle}>{value}</span>
+              <Code>{value}</Code>
             </div>
           ))}
         </div>
-      </div>
+      </Card>
     </div>
   )
 }
@@ -92,7 +93,7 @@ function SwatchGroup(
 ) {
   return () => (
     <div mix={swatchGroupStyle}>
-      <span mix={captionStyle}>{handle.props.label}</span>
+      <Caption>{handle.props.label}</Caption>
       <ul mix={swatchListStyle}>
         {handle.props.items.map((item) => (
           <li key={item.name} mix={swatchStyle}>
@@ -100,7 +101,7 @@ function SwatchGroup(
               mix={[swatchChipStyle, handle.props.bordered ? chipBorderStyle : null]}
               style={{ background: item.value }}
             />
-            <span mix={swatchNameStyle}>{item.name}</span>
+            <Code>{item.name}</Code>
           </li>
         ))}
       </ul>
@@ -138,12 +139,6 @@ const swatchChipStyle = css({
 
 const chipBorderStyle = css({
   boxShadow: `inset 0 0 0 1px ${tokens.colors.border.default}`,
-})
-
-const swatchNameStyle = css({
-  fontFamily: monoFont,
-  fontSize: tokens.fontSize.xs,
-  color: tokens.colors.text.secondary,
 })
 
 const stackStyle = css({
@@ -190,10 +185,4 @@ const spaceBarStyle = css({
   height: '12px',
   borderRadius: '3px',
   background: tokens.colors.focus.ring,
-})
-
-const valueStyle = css({
-  fontFamily: monoFont,
-  fontSize: tokens.fontSize.xs,
-  color: tokens.colors.text.secondary,
 })

@@ -4,7 +4,8 @@ import input from 'remix/ui/input'
 import { Menu, MenuItem } from 'remix/ui/menu'
 import { onMenuSelect } from 'remix/ui/menu/primitives'
 
-import { cardStyle, cardTitleStyle, monoFont, mutedTextStyle } from '../../ui/public/styles.ts'
+import { Card, CardHeader } from '../../ui/public/card.tsx'
+import { Code, Text, VisuallyHidden } from '../../ui/public/text.tsx'
 import { componentStyleValues as tokens } from '../../ui/public/tokens.ts'
 
 type Status = 'ready' | 'building' | 'error'
@@ -33,26 +34,27 @@ export const Deployments = clientEntry(import.meta.url, function Deployments(han
     )
 
     return (
-      <section mix={cardStyle} aria-labelledby="deployments-title">
-        <div mix={headerStyle}>
-          <h3 mix={cardTitleStyle} id="deployments-title">
-            Deployments
-          </h3>
-          <Menu
-            label="Actions"
-            mix={onMenuSelect((event) => {
-              lastAction = event.item.label
-              void handle.update()
-            })}
-          >
-            <MenuItem name="redeploy">Redeploy latest</MenuItem>
-            <MenuItem name="promote">Promote to production</MenuItem>
-            <MenuItem name="logs">View build logs</MenuItem>
-            <MenuItem disabled name="rollback">
-              Roll back
-            </MenuItem>
-          </Menu>
-        </div>
+      <Card aria-labelledby="deployments-title">
+        <CardHeader
+          title="Deployments"
+          titleId="deployments-title"
+          actions={
+            <Menu
+              label="Actions"
+              mix={onMenuSelect((event) => {
+                lastAction = event.item.label
+                void handle.update()
+              })}
+            >
+              <MenuItem name="redeploy">Redeploy latest</MenuItem>
+              <MenuItem name="promote">Promote to production</MenuItem>
+              <MenuItem name="logs">View build logs</MenuItem>
+              <MenuItem disabled name="rollback">
+                Roll back
+              </MenuItem>
+            </Menu>
+          }
+        />
         <div mix={input.root()}>
           <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
             <circle cx="7" cy="7" r="4.75" stroke="currentColor" stroke-width="1.5" />
@@ -80,31 +82,28 @@ export const Deployments = clientEntry(import.meta.url, function Deployments(han
               />
               <span mix={rowTextStyle}>
                 <span mix={messageStyle}>{deployment.message}</span>
-                <span mix={metaStyle}>
+                <Code>
                   {deployment.branch} · {deployment.id}
-                </span>
+                </Code>
               </span>
-              <span mix={metaStyle}>
-                <span mix={srOnly}>{deployment.status}, </span>
+              <Code>
+                <VisuallyHidden>{deployment.status}, </VisuallyHidden>
                 {deployment.age}
-              </span>
+              </Code>
             </li>
           ))}
-          {visible.length === 0 ? <li mix={mutedTextStyle}>No deployments match.</li> : null}
+          {visible.length === 0 ? (
+            <li>
+              <Text>No deployments match.</Text>
+            </li>
+          ) : null}
         </ul>
-        <p mix={mutedTextStyle} aria-live="polite">
+        <Text aria-live="polite">
           {lastAction ? `Selected: ${lastAction}` : 'Pick an action from the menu.'}
-        </p>
-      </section>
+        </Text>
+      </Card>
     )
   }
-})
-
-const headerStyle = css({
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  gap: tokens.space.md,
 })
 
 const listStyle = css({
@@ -142,20 +141,4 @@ const messageStyle = css({
   whiteSpace: 'nowrap',
   overflow: 'hidden',
   textOverflow: 'ellipsis',
-})
-
-const metaStyle = css({
-  fontFamily: monoFont,
-  fontSize: tokens.fontSize.xs,
-  color: tokens.colors.text.secondary,
-  whiteSpace: 'nowrap',
-})
-
-const srOnly = css({
-  position: 'absolute',
-  width: '1px',
-  height: '1px',
-  overflow: 'hidden',
-  clip: 'rect(0 0 0 0)',
-  whiteSpace: 'nowrap',
 })
