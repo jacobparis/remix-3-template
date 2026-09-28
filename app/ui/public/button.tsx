@@ -4,9 +4,9 @@ import button from 'remix/ui/button'
 
 import { componentStyleValues as tokens } from './tokens.ts'
 
-// Keep only Remix's default-attrs behavior and base layout/focus ring. Its size and tone
-// mixins carry :hover:not(...) rules that a reset cannot outrank, so variants replace them.
-let [buttonDefaultAttrs, buttonBase] = button()
+// Keep only Remix's default-attrs behavior (type="button" on <button>). Its style layers
+// hardcode their own font, radius, and focus color, so every style here comes from tokens.
+let [buttonDefaultAttrs] = button()
 
 const hover = '&:hover:not(:disabled):not([aria-disabled="true"])'
 const active = '&:active:not(:disabled):not([aria-disabled="true"])'
@@ -14,13 +14,16 @@ const active = '&:active:not(:disabled):not([aria-disabled="true"])'
 // Clear every property a variant or size could have an opinion about, so each variant
 // only adds the styles it wants.
 const reset = css({
-  '--rmx-button-shadow': '0 0 0 0 transparent',
+  appearance: 'none',
+  boxSizing: 'border-box',
   height: 'auto',
   minHeight: 0,
+  margin: 0,
   padding: 0,
   border: 0,
   borderRadius: 0,
   background: 'transparent',
+  boxShadow: 'none',
   color: 'inherit',
   font: 'inherit',
   letterSpacing: 'inherit',
@@ -30,6 +33,16 @@ const reset = css({
 })
 
 const base = css({
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  maxWidth: '100%',
+  whiteSpace: 'nowrap',
+  userSelect: 'none',
+  WebkitUserSelect: 'none',
+  cursor: 'pointer',
+  '&:focus-visible': { outline: `2px solid ${tokens.colors.focus.ring}`, outlineOffset: '2px' },
+  '&:disabled, &[aria-disabled="true"]': { cursor: 'not-allowed', opacity: 0.55 },
   gap: tokens.space.sm,
   borderRadius: tokens.radius.md,
   fontSize: tokens.fontSize.sm,
@@ -54,7 +67,7 @@ const variants = {
   outline: css({
     background: tokens.colors.action.secondary.background,
     color: tokens.colors.action.secondary.foreground,
-    '--rmx-button-shadow': `inset 0 0 0 1px ${tokens.colors.action.secondary.border}`,
+    boxShadow: `inset 0 0 0 1px ${tokens.colors.action.secondary.border}`,
     [hover]: { background: tokens.colors.action.secondary.backgroundHover },
     [active]: { background: tokens.colors.action.secondary.backgroundActive },
   }),
@@ -89,7 +102,7 @@ export type ButtonSize = keyof typeof sizes
 export type ButtonVariantOptions = { variant?: ButtonVariant; size?: ButtonSize }
 
 export function buttonVariants({ variant = 'default', size = 'default' }: ButtonVariantOptions = {}) {
-  return [buttonDefaultAttrs, buttonBase, reset, base, variants[variant], sizes[size]] as const
+  return [buttonDefaultAttrs, reset, base, variants[variant], sizes[size]] as const
 }
 
 export type ButtonProps = Props<'button'> & ButtonVariantOptions

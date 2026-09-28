@@ -1,5 +1,7 @@
-// Copied verbatim from remix-run/remix packages/ui/src/shared/style-values.ts, the values every
-// remix/ui component is styled with. That module is internal, so apps import these instead.
+// This app's design tokens, seeded from Remix's defaults in remix-run/remix
+// packages/ui/src/shared/style-values.ts. That module is internal and its values are baked into
+// the styled remix/ui components as literals, so nothing upstream reads this file; every
+// component in app/ui/public does. Change a value here to retheme the whole app.
 
 type ComponentActionColors = {
   readonly background: string
