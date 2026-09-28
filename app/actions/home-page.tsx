@@ -16,6 +16,7 @@ import {
 } from '../ui/public/text.ts'
 import { componentStyleValues as tokens } from '../ui/public/tokens.ts'
 import { Document } from './document.tsx'
+import { ComponentGallery } from './public/component-gallery.tsx'
 import { Deployments } from './public/deployments.tsx'
 import { Faq } from './public/faq.tsx'
 import { ProjectSettings } from './public/project-settings.tsx'
@@ -23,6 +24,7 @@ import { ProjectSettings } from './public/project-settings.tsx'
 const navLinks = [
   { href: '#foundations', label: 'Foundations' },
   { href: '#components', label: 'Components' },
+  { href: '#gallery', label: 'Gallery' },
   { href: 'https://api.remix.run', label: 'API' },
 ]
 
@@ -68,6 +70,9 @@ export function HomePage() {
               <Faq />
             </div>
           </div>
+        </Section>
+        <Section id="gallery" title="Every component in app/ui/public, in each variant and size">
+          <ComponentGallery />
         </Section>
       </main>
       <SiteFooter />

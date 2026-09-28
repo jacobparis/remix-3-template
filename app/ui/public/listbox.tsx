@@ -97,12 +97,15 @@ const label = css({ display: 'inline-flex', alignItems: 'center', flex: '1 1 aut
 
 const end = css({
   display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'flex-end',
   flexShrink: 0,
-  width: '14px',
+  minWidth: '14px',
   height: '14px',
   marginInlineStart: 'auto',
-  '& > svg': { display: 'block', width: '100%', height: '100%' },
-})
+  whiteSpace: 'nowrap',
+  '& > svg': { display: 'block', width: '14px', height: '14px' },
+  })
 
 export type ListboxListVariant = keyof typeof listVariants
 
