@@ -146,8 +146,8 @@ const messageStyle = css({
 
 const metaStyle = css({
   fontFamily: monoFont,
-  fontSize: '11px',
-  color: tokens.colors.text.muted,
+  fontSize: tokens.fontSize.xs,
+  color: tokens.colors.text.secondary,
   whiteSpace: 'nowrap',
 })
 

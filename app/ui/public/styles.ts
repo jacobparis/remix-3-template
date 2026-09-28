@@ -22,18 +22,14 @@ export const cardStyle = css({
   background: tokens.surface.lvl0,
   border: `1px solid ${tokens.colors.border.subtle}`,
   borderRadius: tokens.radius.xl,
-  boxShadow: tokens.shadow.sm,
 })
 
-export const eyebrowStyle = css({
+export const captionStyle = css({
   margin: 0,
-  fontFamily: monoFont,
-  fontSize: '11px',
-  fontWeight: 700,
-  lineHeight: 1.33,
-  letterSpacing: '0.1em',
-  textTransform: 'uppercase',
-  color: tokens.colors.text.muted,
+  fontSize: tokens.fontSize.xs,
+  fontWeight: tokens.fontWeight.medium,
+  lineHeight: tokens.lineHeight.normal,
+  color: tokens.colors.text.secondary,
 })
 
 export const cardTitleStyle = css({

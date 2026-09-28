@@ -1,5 +1,5 @@
 import type { Handle, RemixNode } from 'remix/ui'
-import { css, unsafeHTML } from 'remix/ui'
+import { css } from 'remix/ui'
 import { ImportMap } from 'remix/ui/server'
 
 import { scriptEntry } from '../assets.ts'
@@ -12,12 +12,6 @@ export interface DocumentProps {
 }
 
 const DEFAULT_TITLE = 'Remix UI'
-
-// Applies a stored light/dark choice before first paint. Every remix/ui token is a
-// light-dark() value, so switching the root color-scheme switches the whole system.
-const colorSchemeScript = unsafeHTML(
-  `try{var s=localStorage.getItem('color-scheme');if(s==='light'||s==='dark')document.documentElement.style.colorScheme=s}catch(e){}`,
-)
 
 export function Document(handle: Handle<DocumentProps>) {
   return () => {
@@ -32,7 +26,6 @@ export function Document(handle: Handle<DocumentProps>) {
           <meta name="color-scheme" content="light dark" />
           <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
           <title>{title}</title>
-          <script innerHTML={colorSchemeScript} />
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
           <link
