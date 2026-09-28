@@ -11,7 +11,7 @@ import { componentStyleValues as tokens } from './tokens.ts'
 type SearchValue = string | string[]
 
 const enabled = ':not(:disabled):not([aria-disabled="true"])'
-const focusRing = `inset 0 0 0 1px ${tokens.colors.focus.ring}, 0 0 0 3px light-dark(rgb(26 114 255 / 0.16), rgb(110 170 255 / 0.22))`
+const focusRing = `inset 0 0 0 1px ${tokens.colors.focus.ring}, 0 0 0 3px ${tokens.colors.focus.halo}`
 
 const reset = css({
   appearance: 'none',
@@ -39,7 +39,7 @@ const base = css({
   borderRadius: tokens.radius.md,
   color: tokens.colors.text.primary,
   fontSize: tokens.fontSize.sm,
-  lineHeight: '20px',
+  lineHeight: tokens.lineHeight.sm,
   textAlign: 'left',
   whiteSpace: 'nowrap',
   cursor: 'pointer',
@@ -55,7 +55,7 @@ const variants = {
     [`&:hover${enabled}`]: { background: tokens.colors.action.secondary.backgroundHover },
   }),
   ghost: css({
-    [`&:hover${enabled}`]: { background: 'light-dark(rgb(16 16 16 / 0.05), rgb(236 236 236 / 0.1))' },
+    [`&:hover${enabled}`]: { background: tokens.colors.wash.hover },
   }),
 }
 

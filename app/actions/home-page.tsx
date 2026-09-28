@@ -8,6 +8,7 @@ import { LinkButton } from '../ui/public/button.tsx'
 import { Container } from '../ui/public/container.tsx'
 import {
   font2xl,
+  fontDisplay,
   fontLg,
   fontMono,
   fontSemibold,
@@ -155,15 +156,11 @@ function Hero() {
       >
         <h1
           id="hero-title"
-          mix={css({
-            margin: 0,
-            maxWidth: '760px',
-            fontSize: 'clamp(28px, 4.4vw, 44px)',
-            fontWeight: 650,
-            lineHeight: 1.1,
-            letterSpacing: '-0.025em',
-            textWrap: 'balance',
-          })}
+          mix={[
+            fontDisplay,
+            fontSemibold,
+            css({ margin: 0, maxWidth: '760px', textWrap: 'balance' }),
+          ]}
         >
           Remix 3 components render on the server and hydrate without React
         </h1>

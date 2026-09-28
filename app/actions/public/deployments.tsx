@@ -26,9 +26,9 @@ const deployments: { id: string; branch: string; message: string; age: string; s
   ]
 
 const statusColor: Record<Status, string> = {
-  ready: 'light-dark(#1f9d55, #6fdc8c)',
-  building: 'light-dark(#b7791f, #ffdf5f)',
-  error: tokens.colors.action.danger.background,
+  ready: tokens.colors.status.success,
+  building: tokens.colors.status.warning,
+  error: tokens.colors.status.danger,
 }
 
 export const Deployments = clientEntry(import.meta.url, function Deployments(handle: Handle) {

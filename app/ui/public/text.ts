@@ -2,21 +2,27 @@ import { css } from 'remix/ui'
 
 import { componentStyleValues as tokens } from './tokens.ts'
 
-// Each size step fixes font size and line height together so peers share a baseline grid.
-export const fontXs = css({ fontSize: tokens.fontSize.xs, lineHeight: '16px' })
-export const fontSm = css({ fontSize: tokens.fontSize.sm, lineHeight: '20px' })
-export const fontMd = css({ fontSize: tokens.fontSize.md, lineHeight: '22px' })
-export const fontLg = css({ fontSize: '16px', lineHeight: '24px' })
-export const fontXl = css({ fontSize: '20px', lineHeight: '28px' })
-export const font2xl = css({ fontSize: '24px', lineHeight: '32px', letterSpacing: '-0.015em' })
+// Each size step sets font size and its paired line height together so peers share a baseline grid.
+export const fontXs = css({ fontSize: tokens.fontSize.xs, lineHeight: tokens.lineHeight.xs })
+export const fontSm = css({ fontSize: tokens.fontSize.sm, lineHeight: tokens.lineHeight.sm })
+export const fontMd = css({ fontSize: tokens.fontSize.md, lineHeight: tokens.lineHeight.md })
+export const fontLg = css({ fontSize: tokens.fontSize.lg, lineHeight: tokens.lineHeight.lg })
+export const fontXl = css({ fontSize: tokens.fontSize.xl, lineHeight: tokens.lineHeight.xl })
+export const font2xl = css({
+  fontSize: tokens.fontSize['2xl'],
+  lineHeight: tokens.lineHeight['2xl'],
+  letterSpacing: tokens.letterSpacing.tight,
+})
+export const fontDisplay = css({
+  fontSize: tokens.fontSize.display,
+  lineHeight: tokens.lineHeight.display,
+  letterSpacing: tokens.letterSpacing.tighter,
+})
 
 export const fontMedium = css({ fontWeight: tokens.fontWeight.medium })
-export const fontSemibold = css({ fontWeight: '600' })
+export const fontSemibold = css({ fontWeight: tokens.fontWeight.semibold })
 
-export const fontMono = css({
-  fontFamily:
-    "'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace",
-})
+export const fontMono = css({ fontFamily: tokens.fontFamily.mono })
 
 export const textPrimary = css({ color: tokens.colors.text.primary })
 export const textSecondary = css({ color: tokens.colors.text.secondary })

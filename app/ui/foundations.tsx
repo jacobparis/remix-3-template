@@ -1,10 +1,17 @@
 import { css } from 'remix/ui'
-import type { Handle } from 'remix/ui'
+import type { Handle, Props } from 'remix/ui'
 
 import { Card, CardContent, CardHeader, CardTitle } from './public/card.tsx'
 import {
+  font2xl,
+  fontDisplay,
+  fontLg,
+  fontMd,
   fontMedium,
   fontMono,
+  fontSemibold,
+  fontSm,
+  fontXl,
   fontXs,
   textPrimary,
   textSecondary,
@@ -12,26 +19,23 @@ import {
 } from './public/text.ts'
 import { componentStyleValues as tokens } from './public/tokens.ts'
 
-const brandColors = [
-  { name: 'Blue', value: '#20AAFF' },
-  { name: 'Green', value: '#80E464' },
-  { name: 'Yellow', value: '#FFDF5F' },
-  { name: 'Pink', value: '#FF65DB' },
-  { name: 'Red', value: '#FF5148' },
-]
-
+const brandColors = Object.entries(tokens.colors.brand)
+const statusColors = Object.entries(tokens.colors.status)
 const surfaces = Object.entries(tokens.surface)
 const actions = Object.entries(tokens.colors.action)
 const textColors = Object.entries(tokens.colors.text)
 const radii = Object.entries(tokens.radius)
 const spaces = Object.entries(tokens.space).filter(([name]) => name !== 'none')
 
-const typeScale = [
-  { name: 'Display, 40px', size: '40px', weight: 700, sample: 'Build on the web' },
-  { name: 'Heading, 20px', size: '20px', weight: 600, sample: 'Project settings' },
-  { name: 'Body, 14px', size: tokens.fontSize.md, weight: 400, sample: 'Body copy for pages.' },
-  { name: 'Control, 13px', size: tokens.fontSize.sm, weight: 400, sample: 'Controls and menus.' },
-  { name: 'Label, 12px', size: tokens.fontSize.xs, weight: 500, sample: 'Labels and buttons.' },
+const typeScale: { token: string; mix: Props<'span'>['mix']; sample: string }[] = [
+  { token: 'display', mix: [fontDisplay, fontSemibold], sample: 'Build on the web' },
+  { token: '2xl', mix: [font2xl, fontSemibold], sample: 'Project settings' },
+  { token: 'xl', mix: [fontXl, fontSemibold], sample: 'Deployments' },
+  { token: 'lg', mix: [fontLg], sample: 'Lead paragraphs under a heading.' },
+  { token: 'md', mix: [fontMd], sample: 'Body copy for pages.' },
+  { token: 'sm', mix: [fontSm], sample: 'Controls and menus.' },
+  { token: 'xs', mix: [fontXs, fontMedium], sample: 'Labels and captions.' },
+  { token: 'mono', mix: [fontSm, fontMono], sample: 'dpl_6a9z main 3h' },
 ]
 
 export function Foundations() {
@@ -49,7 +53,11 @@ export function Foundations() {
           <CardTitle>Colors switch with the page between light and dark</CardTitle>
         </CardHeader>
         <CardContent mix={css({ display: 'grid', gap: '20px' })}>
-          <SwatchGroup label="Brand" items={brandColors} />
+          <SwatchGroup label="Brand" items={brandColors.map(([name, value]) => ({ name, value }))} />
+          <SwatchGroup
+            label="Status"
+            items={statusColors.map(([name, value]) => ({ name, value }))}
+          />
           <SwatchGroup
             label="Surface"
             items={surfaces.map(([name, value]) => ({ name, value }))}
@@ -65,7 +73,7 @@ export function Foundations() {
       </Card>
       <Card>
         <CardHeader>
-          <CardTitle>Inter carries every size from display to label</CardTitle>
+          <CardTitle>Inter sets every size step, JetBrains Mono sets code</CardTitle>
         </CardHeader>
         <CardContent>
           <ul
@@ -79,7 +87,7 @@ export function Foundations() {
           >
             {typeScale.map((step) => (
               <li
-                key={step.name}
+                key={step.token}
                 mix={css({
                   display: 'grid',
                   gap: '2px',
@@ -88,17 +96,8 @@ export function Foundations() {
                   '&:last-child': { borderBlockEnd: 0, paddingBlockEnd: 0 },
                 })}
               >
-                <span mix={[fontXs, fontMedium, textSecondary]}>{step.name}</span>
-                <span
-                  mix={[
-                    textPrimary,
-                    truncate,
-                    css({ lineHeight: 1.2, letterSpacing: '-0.01em' }),
-                  ]}
-                  style={{ fontSize: step.size, fontWeight: String(step.weight) }}
-                >
-                  {step.sample}
-                </span>
+                <code mix={[fontXs, fontMono, textSecondary]}>{step.token}</code>
+                <span mix={[step.mix, textPrimary, truncate]}>{step.sample}</span>
               </li>
             ))}
           </ul>
@@ -177,9 +176,9 @@ function SwatchGroup(
               mix={css({
                 height: '44px',
                 borderRadius: tokens.radius.lg,
-                boxShadow: handle.props.bordered
-                  ? `inset 0 0 0 1px ${tokens.colors.border.default}`
-                  : 'inset 0 0 0 1px rgb(0 0 0 / 0.06)',
+                boxShadow: `inset 0 0 0 1px ${
+                  handle.props.bordered ? tokens.colors.border.default : tokens.colors.border.subtle
+                }`,
               })}
               style={{ background: item.value }}
             />

@@ -4,8 +4,8 @@ import type { Handle, Props, RemixNode } from 'remix/ui'
 import { componentStyleValues as tokens } from './tokens.ts'
 import type { DistributiveOmit } from './types.ts'
 
-const focusRing = `inset 0 0 0 1px ${tokens.colors.focus.ring}, 0 0 0 3px light-dark(rgb(26 114 255 / 0.16), rgb(110 170 255 / 0.22))`
-const invalidRing = `inset 0 0 0 1px ${tokens.colors.action.danger.background}, 0 0 0 3px light-dark(rgb(255 48 0 / 0.14), rgb(255 138 112 / 0.2))`
+const focusRing = `inset 0 0 0 1px ${tokens.colors.focus.ring}, 0 0 0 3px ${tokens.colors.focus.halo}`
+const invalidRing = `inset 0 0 0 1px ${tokens.colors.action.danger.background}, 0 0 0 3px ${tokens.colors.focus.haloDanger}`
 
 // Clear every property a variant or size could decide, including the native field chrome.
 const reset = css({
@@ -32,7 +32,7 @@ const base = css({
   borderRadius: tokens.radius.md,
   color: tokens.colors.text.primary,
   fontSize: tokens.fontSize.sm,
-  lineHeight: '20px',
+  lineHeight: tokens.lineHeight.sm,
   transition: 'box-shadow 120ms, background-color 120ms',
   '&::placeholder, & input::placeholder': { color: tokens.colors.text.muted, opacity: 1 },
   '&:focus-visible, &:focus-within': { boxShadow: focusRing },

@@ -50,7 +50,7 @@ const trigger = css({
   paddingBlock: tokens.space.md,
   color: tokens.colors.text.primary,
   fontSize: tokens.fontSize.sm,
-  lineHeight: '20px',
+  lineHeight: tokens.lineHeight.sm,
   fontWeight: tokens.fontWeight.medium,
   cursor: 'pointer',
   '&:hover:not(:disabled) > span:first-child': { textDecorationLine: 'underline' },

@@ -58,7 +58,7 @@ const optionBase = css({
   paddingInline: `calc(${tokens.space.sm} + ${tokens.space.xs})`,
   color: tokens.colors.text.primary,
   fontSize: tokens.fontSize.sm,
-  lineHeight: '20px',
+  lineHeight: tokens.lineHeight.sm,
   userSelect: 'none',
   WebkitUserSelect: 'none',
   scrollMarginBlock: tokens.space.xs,

@@ -89,7 +89,7 @@ const tab = css({
   borderRadius: 'var(--tabs-tab-radius)',
   color: tokens.colors.text.secondary,
   fontSize: 'var(--tabs-font-size)',
-  lineHeight: '20px',
+  lineHeight: tokens.lineHeight.sm,
   fontWeight: tokens.fontWeight.medium,
   whiteSpace: 'nowrap',
   cursor: 'pointer',
@@ -110,7 +110,7 @@ const panel = css({
   minWidth: 0,
   color: tokens.colors.text.primary,
   fontSize: tokens.fontSize.sm,
-  lineHeight: '20px',
+  lineHeight: tokens.lineHeight.sm,
   '&:focus-visible': { outline: `2px solid ${tokens.colors.focus.ring}`, outlineOffset: '2px' },
   '&[hidden]': { display: 'none' },
 })

@@ -11,6 +11,16 @@ type ComponentActionColors = {
   readonly border: string
 }
 
+// fontSize and lineHeight share these keys so each size step has one matching line height.
+type TypeSteps = {
+  readonly xs: string
+  readonly sm: string
+  readonly md: string
+  readonly lg: string
+  readonly xl: string
+  readonly '2xl': string
+}
+
 type ComponentStyleValues = {
   readonly space: {
     readonly none: string
@@ -27,19 +37,23 @@ type ComponentStyleValues = {
   }
   readonly fontFamily: {
     readonly sans: string
+    readonly mono: string
   }
-  readonly fontSize: {
-    readonly xs: string
-    readonly sm: string
-    readonly md: string
-  }
-  readonly lineHeight: {
+  readonly fontSize: TypeSteps & { readonly display: string }
+  readonly lineHeight: TypeSteps & {
+    readonly display: string
     readonly normal: string
     readonly relaxed: string
+  }
+  readonly letterSpacing: {
+    readonly normal: string
+    readonly tight: string
+    readonly tighter: string
   }
   readonly fontWeight: {
     readonly normal: string
     readonly medium: string
+    readonly semibold: string
   }
   readonly control: {
     readonly height: {
@@ -59,8 +73,29 @@ type ComponentStyleValues = {
     readonly xs: string
     readonly sm: string
     readonly md: string
+    readonly thumb: string
   }
   readonly colors: {
+    readonly brand: {
+      readonly blue: string
+      readonly green: string
+      readonly yellow: string
+      readonly pink: string
+      readonly red: string
+    }
+    readonly selection: {
+      readonly background: string
+      readonly foreground: string
+    }
+    readonly status: {
+      readonly success: string
+      readonly warning: string
+      readonly danger: string
+    }
+    readonly control: {
+      readonly track: string
+      readonly thumb: string
+    }
     readonly text: {
       readonly primary: string
       readonly secondary: string
@@ -72,6 +107,12 @@ type ComponentStyleValues = {
     }
     readonly focus: {
       readonly ring: string
+      readonly halo: string
+      readonly haloDanger: string
+    }
+    readonly wash: {
+      readonly hover: string
+      readonly active: string
     }
     readonly action: {
       readonly primary: ComponentActionColors
@@ -99,17 +140,35 @@ export const componentStyleValues: ComponentStyleValues = {
     xs: '12px',
     sm: '13px',
     md: '14px',
+    lg: '16px',
+    xl: '20px',
+    '2xl': '24px',
+    display: 'clamp(28px, 4.4vw, 44px)',
   },
   fontFamily: {
     sans: '"Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+    mono: '"JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace',
   },
   lineHeight: {
+    xs: '16px',
+    sm: '20px',
+    md: '22px',
+    lg: '24px',
+    xl: '28px',
+    '2xl': '32px',
+    display: '1.1',
     normal: '1.45',
     relaxed: '1.65',
+  },
+  letterSpacing: {
+    normal: '0',
+    tight: '-0.015em',
+    tighter: '-0.025em',
   },
   fontWeight: {
     normal: '400',
     medium: '500',
+    semibold: '600',
   },
   control: {
     height: {
@@ -129,8 +188,29 @@ export const componentStyleValues: ComponentStyleValues = {
     xs: '0 1px 1px rgb(0 0 0 / 0.05)',
     sm: '0 1px 2px rgb(0 0 0 / 0.07)',
     md: '0 6px 18px rgb(0 0 0 / 0.08)',
+    thumb: '0 1px 2px rgb(0 0 0 / 0.2)',
   },
   colors: {
+    brand: {
+      blue: '#20AAFF',
+      green: '#80E464',
+      yellow: '#FFDF5F',
+      pink: '#FF65DB',
+      red: '#FF5148',
+    },
+    selection: {
+      background: '#FFDF5F',
+      foreground: '#151515',
+    },
+    status: {
+      success: 'light-dark(#1f9d55, #6fdc8c)',
+      warning: 'light-dark(#b7791f, #ffdf5f)',
+      danger: 'light-dark(#FF3000, #ff8a70)',
+    },
+    control: {
+      track: 'light-dark(#dcdcdc, #3a3a3a)',
+      thumb: '#ffffff',
+    },
     text: {
       primary: 'light-dark(#151515, #ececec)',
       secondary: 'light-dark(#4f4f4f, #b3b3b3)',
@@ -142,6 +222,12 @@ export const componentStyleValues: ComponentStyleValues = {
     },
     focus: {
       ring: 'light-dark(#1A72FF, #6eaaff)',
+      halo: 'light-dark(rgb(26 114 255 / 0.16), rgb(110 170 255 / 0.22))',
+      haloDanger: 'light-dark(rgb(255 48 0 / 0.14), rgb(255 138 112 / 0.2))',
+    },
+    wash: {
+      hover: 'light-dark(rgb(16 16 16 / 0.05), rgb(236 236 236 / 0.1))',
+      active: 'light-dark(rgb(16 16 16 / 0.08), rgb(236 236 236 / 0.14))',
     },
     action: {
       primary: {

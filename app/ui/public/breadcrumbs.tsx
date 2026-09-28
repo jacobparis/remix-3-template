@@ -15,7 +15,7 @@ const list = css({
   gap: `${tokens.space.xs} 6px`,
   minWidth: 0,
   fontSize: tokens.fontSize.sm,
-  lineHeight: '20px',
+  lineHeight: tokens.lineHeight.sm,
 })
 
 const item = css({ display: 'inline-flex', alignItems: 'center', minWidth: 0 })

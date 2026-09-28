@@ -52,7 +52,10 @@ export function Document(handle: Handle<DocumentProps>) {
             WebkitFontSmoothing: 'antialiased',
             MozOsxFontSmoothing: 'grayscale',
             '& *, & *::before, & *::after': { boxSizing: 'border-box' },
-            '& ::selection': { background: '#FFDF5F', color: '#151515' },
+            '& ::selection': {
+              background: tokens.colors.selection.background,
+              color: tokens.colors.selection.foreground,
+            },
           })}
         >
           {children}

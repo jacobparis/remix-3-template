@@ -47,7 +47,7 @@ const base = css({
   borderRadius: tokens.radius.md,
   fontSize: tokens.fontSize.sm,
   fontWeight: tokens.fontWeight.medium,
-  lineHeight: '20px',
+  lineHeight: tokens.lineHeight.sm,
   transition: 'background-color 120ms, border-color 120ms, color 120ms',
   '& svg': { flexShrink: 0, width: '14px', height: '14px' },
 })
@@ -73,8 +73,8 @@ const variants = {
   }),
   ghost: css({
     color: tokens.colors.text.primary,
-    [hover]: { background: 'light-dark(rgb(16 16 16 / 0.05), rgb(236 236 236 / 0.1))' },
-    [active]: { background: 'light-dark(rgb(16 16 16 / 0.08), rgb(236 236 236 / 0.14))' },
+    [hover]: { background: tokens.colors.wash.hover },
+    [active]: { background: tokens.colors.wash.active },
   }),
   destructive: css({
     background: tokens.colors.action.danger.background,
