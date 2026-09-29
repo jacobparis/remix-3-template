@@ -1,0 +1,8 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "server.ts": {
+      "includeFiles": "{app/routes.ts,app/**/public/**,tsconfig.json,node_modules/**}"
+    }
+  }
+}
